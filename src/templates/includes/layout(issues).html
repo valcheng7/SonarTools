@@ -22,6 +22,7 @@
   <!-- Page plugins -->
   <!-- Argon CSS -->
   <link rel="stylesheet" href="../../static/css/argon.css?v=1.2.0" type="text/css">
+  <link rel="stylesheet" href="../../static/css/faq.css">
 
 
 {% block head %}
@@ -278,6 +279,58 @@
 
 {% block content %}
 {% endblock %}
+<input type="image" src="https://cdn2.iconfinder.com/data/icons/ios7-inspired-mac-icon-set/1024/messages_5122x.png" class="open-button" onload="openForm()" onclick="openForm()"  />
+<div class="chat-popup" id="myForm">
+  <form class="form-container" id="chat-data" action="/result" method="POST", onsubmit="">
+      <div class="chat">
+  <div class="contact bar">
+    <div class="pic stark"></div>
+    <div class="name">
+      Sonar Bot &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        <a href="javascript:void(0)" class="closebtn" onclick="closeChat()" style="color: black;font-size: 20px;">×</a>
+    </div>
+
+    <div class="seen">
+      Online
+
+    </div>
+
+
+
+    
+  </div>
+  <div class="messages" id="chat">
+
+    {% for key,value in result%}
+        {% if value["pic"] %}
+        <div class="{{key}}">
+          <img src="{{value['pic']}}" alt="" class="img-fluid">
+          {{value["text"]}}
+        </div>
+        {% elif value["button"] %}
+          <div class="container chatbotContainer">
+            <div class="row">
+              {% for i in range(value["button"]|length)%}
+              <div class="col-sm-8 message stark">{{value["button"][i]}}</div>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+        <div class="{{key}}">
+          {{value["text"]}}
+        </div>
+        {% endif %}
+    {% endfor %}
+  </div>
+  <div class="input">
+    <!-- <i class="fas fa-camera"></i><i class="far fa-laugh-beam"></i> -->
+    <i class="fas fa-microphone" id="mic"></i><i class="fas fa-volume-mute vol" style="white-space: nowrap; margin-right:5px"></i>
+    <input placeholder="Type your message here!" type="text" name="msg" />
+    <button type="submit" id="out" onclick="" style="border:none; background-color: white;outline: none;"><i class="far fa-paper-plane"></i></button>
+  </div>
+</div>
+</form>
+</div>
 
 
 
@@ -329,7 +382,8 @@
   <script src="../../static/vendor/chart.js/dist/Chart.extension.js"></script>
   <!-- Argon JS -->
   <script src="../../static/js/argon.js?v=1.2.0"></script>
-
+  <!--Chatbot.JS-->
+  <script src="../../static/js/chatbot.js"></script>
   <script>
     // Datepicker
     $('.datepicker').datepicker();

@@ -289,7 +289,6 @@ class sonarAPI:
         
     """Specific project's source code issues pertaining to each code file"""
     def specificProjectSourceCodeIssues(self, projectTitle):
-        start = time.time() 
         total = int(requests.get(f"http://sonarqubedev.southeastasia.cloudapp.azure.com/api/issues/search?componentKeys={projectTitle}&ps=500&resolved=false&additionalFields=rules", auth=(self.__username, self.__password)).json()["total"])
         pageSize, pageNumber = 500,1 
         while total > pageSize: 
@@ -319,15 +318,8 @@ class sonarAPI:
         for i in raw: 
             if i["src"] in srcNames.keys():
                 srcNames[i["src"]].append(i)
-        # print("ending time", time.time()-start)
-        # print(srcNames.keys())
         return srcNames
 
-    # def projectFileRatings(self, arr):
-        #  with FuturesSession() as session:
-        #     futures = [session.get(f"", auth=(self.__username, self.__password)) for j in arr]
-
-        
     """Specific file source code and errors"""
     def specificFileSourceCodeAndIssues(self, fileName):
         try:

@@ -176,7 +176,7 @@ def exportExcel(projectTitle, issues_data, name, params2):
 
     ## Removing extra sheet automatically generated ##
     extra_sheet = wb['Sheet']
-    wb.remove_sheet(extra_sheet)
+    wb.remove(extra_sheet)
 
     ## Font ##
     font = Font(name='Bahnschrift',size=20,
@@ -242,6 +242,16 @@ def exportExcel(projectTitle, issues_data, name, params2):
                 underline='none',
                 strike=False,
                 color='000000')
+
+    font8 = Font(name='Calibri',
+                size=11,
+                color='4F81BD', 
+                underline=None)
+
+    font9 = Font(name='Calibri',
+                size=11,
+                color='4F81BD', 
+                underline='single')
 
     ## Borders ##
     thin_border = Border(left=Side(style='thin'), 
@@ -483,7 +493,7 @@ def exportExcel(projectTitle, issues_data, name, params2):
     second_sheet['A1'].alignment = Alignment(vertical='center')
 
     ## Adding color to top cells ##
-    widths = [32, 150, 20.67, 13.22, 14.44, 8.78, 17.11, 19.11, 15.11, 12.11, 14.67, 16.11]
+    widths = [37.11, 25.22, 23.89, 16.11, 39, 8.78, 17.11, 19.11, 15.11, 12.11, 14.67, 16.11]
     upperCases = string.ascii_uppercase
     for j in range(0,len(widths)):
         second_sheet.column_dimensions[f'{upperCases[j]}'].width = widths[j]
@@ -522,24 +532,26 @@ def exportExcel(projectTitle, issues_data, name, params2):
     second_sheet['A6'].border = thin_border
     increment_count = 0
 
-    if params2['type'] != []:
-        for i in params2['type']:
-            second_sheet[f'A{7+increment_count}'] = i
-            second_sheet[f'A{7+increment_count}'].font = font1
-            second_sheet[f'A{7+increment_count}'].border = thin_border
-            second_sheet[f'A{7+increment_count}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
-            increment_count += 1
-    if params2['date'] != []:
-        if len(params2['date']) == 1:
-            second_sheet[f'A{7+increment_count}'] = f'From {params2["date"][0]} to {params2["date"][0]}'
-            second_sheet[f'A{7+increment_count}'].font = font1
-            second_sheet[f'A{7+increment_count}'].border = thin_border
-            second_sheet[f'A{7+increment_count}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
-        else:
-            second_sheet[f'A{7+increment_count}'] = f'From {params2["date"][0]} to {params2["date"][1]}'
-            second_sheet[f'A{7+increment_count}'].font = font1
-            second_sheet[f'A{7+increment_count}'].border = thin_border
-            second_sheet[f'A{7+increment_count}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
+    for j in params2:
+        if params2[j] != []:
+            for i in params2[j]:
+                if params2['date'] != []:
+                    if len(params2['date']) == 1:
+                        second_sheet[f'A{7+increment_count}'] = f'From {params2["date"][0]} to {params2["date"][0]}'
+                        second_sheet[f'A{7+increment_count}'].font = font1
+                        second_sheet[f'A{7+increment_count}'].border = thin_border
+                        second_sheet[f'A{7+increment_count}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
+                    else:
+                        second_sheet[f'A{7+increment_count}'] = f'From {params2["date"][0]} to {params2["date"][1]}'
+                        second_sheet[f'A{7+increment_count}'].font = font1
+                        second_sheet[f'A{7+increment_count}'].border = thin_border
+                        second_sheet[f'A{7+increment_count}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
+                else:
+                    second_sheet[f'A{7+increment_count}'] = i
+                    second_sheet[f'A{7+increment_count}'].font = font1
+                    second_sheet[f'A{7+increment_count}'].border = thin_border
+                    second_sheet[f'A{7+increment_count}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
+                increment_count += 1
 
 
 
@@ -547,64 +559,224 @@ def exportExcel(projectTitle, issues_data, name, params2):
 
     start = 7 + increment_count + 2
 
-    # issues_data = specificProjectSourceCodeIssues(f'{projectTitle}')
+    listOfHeaders = ['File Name', 'Message', 'Issue ID', 'Rule ID','View more']
+    listOfKeys = ['src', 'message', 'key', 'rule']
 
-    # print(issues_data)
+    ## Header ##
+    for index, i in enumerate(upperCases[0:5]):
+        second_sheet[f'{i}{start}'] = listOfHeaders[index]
+        second_sheet[f'{i}{start}'].font = font6
+        second_sheet[f'{i}{start}'].fill = PatternFill(start_color='5E72E4', end_color='5E72E4',fill_type='solid')
+        second_sheet[f'{i}{start}'].border = thin_border
+        second_sheet[f'{i}{start}'].alignment = Alignment(horizontal='center', vertical='bottom')
+    start += 1
 
-    for i in issues_data:
-        second_sheet[f'A{start}'] = f'File Name: {i}'
-        second_sheet[f'A{start}'].font = font5
-        second_sheet[f'A{start}'].alignment = Alignment(horizontal='left', vertical='center')
-        for j in issues_data[i]:
-            second_sheet.merge_cells(f'A{start+2}:B{start+2}')
-            second_sheet[f'A{start+2}'] = f'Issue'
-            second_sheet[f'A{start+2}'].border = thin_border
-            second_sheet[f'A{start+2}'].font = font7
-            second_sheet[f'A{start+2}'].alignment = Alignment(horizontal='center', vertical='bottom')
-            second_sheet[f'A{start+2}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
-            second_sheet[f'B{start+2}'].border = thin_border
-            second_sheet[f'B{start+2}'].font = font7
-            second_sheet[f'B{start+2}'].alignment = Alignment(horizontal='center', vertical='bottom')
-            second_sheet[f'B{start+2}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
-            li = ['Message', 'Type', 'Severity', 'Status', 'Effort', 'Date', 'Line']
-            keys = ['message', 'type', 'severity', 'status', 'effort', 'creationDate', 'startLine']
-            start += 2
-            for k in range(1,8):
-                second_sheet[f'A{start+k}'] = f'{li[k-1]}'
-                second_sheet[f'A{start+k}'].font = font3
-                second_sheet[f'A{start+k}'].border = thin_border
-                second_sheet[f'A{start+k}'].alignment = Alignment(horizontal='center', vertical='bottom')
-                second_sheet[f'A{start+k}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
+    
 
-                if k != 1:
-                    second_sheet[f'B{start+k}'] = f'{j[keys[k-1]]}'
-                    second_sheet[f'B{start+k}'].font = font4
-                    second_sheet[f'B{start+k}'].border = thin_border
-                    second_sheet[f'B{start+k}'].alignment = Alignment(horizontal='center', vertical='bottom')
+    sheet_count = 2
+
+    for key in issues_data:
+        for j in issues_data[key]:
+            for index, i in enumerate(upperCases[0:5]):
+                if index == 4:
+                    # second_sheet[f'{i}{start}'] = "Click here to view more information"
+                    second_sheet[f'{i}{start}'].value = f'=HYPERLINK("#{j["""key"""]}!A6","Click here to view more information")'
+                    second_sheet[f'{i}{start}'].font = font8
+                    second_sheet[f'{i}{start}'].border = thin_border
+                    second_sheet[f'{i}{start}'].alignment = Alignment(horizontal='center', vertical='bottom')
+                elif index == 1 and i=='B':
+                    second_sheet[f'{i}{start}'] = j[listOfKeys[index]]
+                    second_sheet[f'{i}{start}'].font = font4
+                    second_sheet[f'{i}{start}'].border = thin_border
+                    second_sheet[f'{i}{start}'].alignment = Alignment(horizontal='center', vertical='bottom', wrapText=True)
+                elif index == 0 and i=='A':
+                    second_sheet[f'{i}{start}'] = j[listOfKeys[index]]
+                    second_sheet[f'{i}{start}'].font = font4
+                    second_sheet[f'{i}{start}'].border = thin_border
+                    second_sheet[f'{i}{start}'].alignment = Alignment(horizontal='center', vertical='bottom', wrapText=True)
                 else:
-                    second_sheet[f'B{start+k}'] = f'{j[keys[k-1]]}'
-                    second_sheet[f'B{start+k}'].font = font4
-                    second_sheet[f'B{start+k}'].border = thin_border
-                    second_sheet[f'B{start+k}'].alignment = Alignment(horizontal='center', vertical='bottom')
-            second_sheet[f'A{start+9}'] = f'Why is this an issue?'
-            second_sheet[f'A{start+9}'].font = font3
-            # second_sheet[f'A{start+2}'].border = thin_border
-            # second_sheet[f'A{start+2}'].alignment = Alignment(horizontal='center', vertical='bottom')
-            start += 3
-            ws = wb['Issues']
-            print(j['rule'])
+                    second_sheet[f'{i}{start}'] = j[listOfKeys[index]]
+                    second_sheet[f'{i}{start}'].font = font4
+                    second_sheet[f'{i}{start}'].border = thin_border
+                    second_sheet[f'{i}{start}'].alignment = Alignment(horizontal='center', vertical='bottom')
+
+            ## Creation of individual issue sheet ##
+            wb.create_sheet(index=sheet_count, title=f'{j["key"]}')
+
+            current_sheet = wb[f'{j["key"]}']
+
+            current_sheet['A1'] = 'Project Issues'
+            current_sheet.row_dimensions[1].height = 38.4
+            current_sheet['A1'].font = font
+            current_sheet['A1'].alignment = Alignment(vertical='center')
+
+            ## Adding color to top cells ##
+            widths = [37.11, 25.22, 23.89, 16.11, 39, 8.78, 17.11, 19.11, 15.11, 12.11, 14.67, 16.11]
+            upperCases = string.ascii_uppercase
+            for num in range(0,len(widths)):
+                current_sheet.column_dimensions[f'{upperCases[num]}'].width = widths[num]
+                current_sheet[f'{upperCases[num]}1'].fill = PatternFill(start_color='5E72E4', end_color='5E72E4',fill_type='solid')
+
+            ## Inserting Sonar Tools Icon ##
+            ws = current_sheet
+            img = openpyxl.drawing.image.Image(resource_path('src/static/img/brand/cyros_white.png'))
+            img.anchor ='J1'
+            img.height = 30.72
+            img.width = 241.92
+            ws.add_image(img)
+
+            current_sheet[f'A3'].value = f'=HYPERLINK("#Issues!A6","Go back to Project Issues tab")'
+            current_sheet[f'A3'].font = font9
+
+            current_sheet[f'A5'] = f'File Name: {j["src"]}'
+            current_sheet[f'A5'].font = font7
+
+            current_sheet[f'A7'] = 'Issue'
+            current_sheet[f'A7'].font = font3
+            current_sheet[f'A7'].border = thin_border
+            current_sheet[f'A7'].alignment = Alignment(horizontal='center', vertical='bottom')
+            current_sheet[f'A7'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
+
+            current_sheet[f'B7'].font = font3
+            current_sheet[f'B7'].border = thin_border
+            current_sheet[f'B7'].alignment = Alignment(horizontal='center', vertical='bottom')
+            current_sheet[f'B7'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
+
+            start2 = 7
+
+            li = ['Message', 'Issue ID', 'Type', 'Severity', 'Status', 'Effort', 'Date', 'Line', 'Rule ID']
+            keys = ['message', 'key', 'type','severity', 'status', 'effort', 'creationDate', 'startLine', 'rule']
+
+            for k in range(1,10):
+    
+                current_sheet[f'A{start2+k}'] = f'{li[k-1]}'
+                current_sheet[f'A{start2+k}'].font = font3
+                current_sheet[f'A{start2+k}'].border = thin_border
+                current_sheet[f'A{start2+k}'].alignment = Alignment(horizontal='center', vertical='bottom')
+                current_sheet[f'A{start2+k}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
+
+                if k ==  1:
+                    current_sheet[f'B{start2+k}'] = f'{j[keys[k-1]]}'
+                    current_sheet[f'B{start2+k}'].font = font4
+                    current_sheet[f'B{start2+k}'].border = thin_border
+                    current_sheet[f'B{start2+k}'].alignment = Alignment(horizontal='center', vertical='bottom', wrap_text=True)
+                else:
+                    current_sheet[f'B{start2+k}'] = f'{j[keys[k-1]]}'
+                    current_sheet[f'B{start2+k}'].font = font4
+                    current_sheet[f'B{start2+k}'].border = thin_border
+                    current_sheet[f'B{start2+k}'].alignment = Alignment(horizontal='center', vertical='bottom')
+
+            current_sheet[f'A18'] = f'Why is this an issue?'
+            current_sheet[f'A18'].font = font3
+
             imageName = j['rule'].replace(':', '')
             if '/' in imageName:
                 imageName = imageName.replace('/','')
             img = openpyxl.drawing.image.Image(f"src/rules/{imageName}.png")
-            img.anchor = f'A{start+9}'
+            img.anchor = f'A20'
             ws.add_image(img)
-            start += 65
-        start += 2          
 
-    for i in range(2, start+1):
-        second_sheet.row_dimensions[i].fill = PatternFill(start_color='00FFFFFF', end_color='00FFFFFF',fill_type='solid')
+            for i in range(2, 78):
+                current_sheet.row_dimensions[i].fill = PatternFill(start_color='00FFFFFF', end_color='00FFFFFF',fill_type='solid')
+
+            start += 1
+            sheet_count += 1
+        
+        for i in range(2, start):
+            second_sheet.row_dimensions[i].fill = PatternFill(start_color='00FFFFFF', end_color='00FFFFFF',fill_type='solid')
+
+
+
+    # print(issues_data)
+
+    # for i in issues_data:
+    #     second_sheet[f'A{start}'] = f'File Name: {i}'
+    #     second_sheet[f'A{start}'].font = font5
+    #     second_sheet[f'A{start}'].alignment = Alignment(horizontal='left', vertical='center')
+    #     for j in issues_data[i]:
+    #         second_sheet.merge_cells(f'A{start+2}:B{start+2}')
+    #         second_sheet[f'A{start+2}'] = f'Issue'
+    #         second_sheet[f'A{start+2}'].border = thin_border
+    #         second_sheet[f'A{start+2}'].font = font7
+    #         second_sheet[f'A{start+2}'].alignment = Alignment(horizontal='center', vertical='bottom')
+    #         second_sheet[f'A{start+2}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
+    #         second_sheet[f'B{start+2}'].border = thin_border
+    #         second_sheet[f'B{start+2}'].font = font7
+    #         second_sheet[f'B{start+2}'].alignment = Alignment(horizontal='center', vertical='bottom')
+    #         second_sheet[f'B{start+2}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
+    #         li = ['Message', 'Type', 'Severity', 'Status', 'Effort', 'Date', 'Line']
+    #         keys = ['message', 'type', 'severity', 'status', 'effort', 'creationDate', 'startLine']
+    #         start += 2
+    #         for k in range(1,8):
+    #             second_sheet[f'A{start+k}'] = f'{li[k-1]}'
+    #             second_sheet[f'A{start+k}'].font = font3
+    #             second_sheet[f'A{start+k}'].border = thin_border
+    #             second_sheet[f'A{start+k}'].alignment = Alignment(horizontal='center', vertical='bottom')
+    #             second_sheet[f'A{start+k}'].fill = PatternFill(start_color='B4BDF2', end_color='B4BDF2',fill_type='solid')
+
+    #             if k != 1:
+    #                 second_sheet[f'B{start+k}'] = f'{j[keys[k-1]]}'
+    #                 second_sheet[f'B{start+k}'].font = font4
+    #                 second_sheet[f'B{start+k}'].border = thin_border
+    #                 second_sheet[f'B{start+k}'].alignment = Alignment(horizontal='center', vertical='bottom')
+    #             else:
+    #                 second_sheet[f'B{start+k}'] = f'{j[keys[k-1]]}'
+    #                 second_sheet[f'B{start+k}'].font = font4
+    #                 second_sheet[f'B{start+k}'].border = thin_border
+    #                 second_sheet[f'B{start+k}'].alignment = Alignment(horizontal='center', vertical='bottom')
+    #         second_sheet[f'A{start+9}'] = f'Why is this an issue?'
+    #         second_sheet[f'A{start+9}'].font = font3
+    #         # second_sheet[f'A{start+2}'].border = thin_border
+    #         # second_sheet[f'A{start+2}'].alignment = Alignment(horizontal='center', vertical='bottom')
+    #         start += 3
+    #         ws = wb['Issues']
+    #         print(j['rule'])
+    #         imageName = j['rule'].replace(':', '')
+    #         if '/' in imageName:
+    #             imageName = imageName.replace('/','')
+    #         img = openpyxl.drawing.image.Image(f"src/rules/{imageName}.png")
+    #         img.anchor = f'A{start+9}'
+    #         ws.add_image(img)
+    #         start += 65
+    #     start += 2          
+
+    # for i in range(2, start+1):
+    #     second_sheet.row_dimensions[i].fill = PatternFill(start_color='00FFFFFF', end_color='00FFFFFF',fill_type='solid')
 
     wb.save('src/static/downloads/csv/issues.xlsx')
 
-# exportExcel('webgoat_sonarqube3')
+# def specificProjectSourceCodeIssues(projectTitle):
+#         total = int(requests.get(f"http://sonarqubedev.southeastasia.cloudapp.azure.com/api/issues/search?componentKeys={projectTitle}&ps=500&resolved=false&additionalFields=rules", auth=(username, password)).json()["total"])
+#         pageSize, pageNumber = 500,1 
+#         while total > pageSize: 
+#             total -= pageSize
+#             pageNumber += 1
+#         with FuturesSession() as session:
+#             futures = [session.get(f"http://sonarqubedev.southeastasia.cloudapp.azure.com/api/issues/search?componentKeys={projectTitle}&ps=500&p={j}&resolved=false&additionalFields=rules", auth=(username, password)) for j in range(1,pageNumber+1)]
+#         raw, srcNames = [], {}
+#         for res in as_completed(futures):
+#             if res.result().json()["issues"] != []:
+#                 for secondIndex, con in enumerate(res.result().json()["issues"]):
+#                     raw.append({
+#                     "src":con["component"], 
+#                     "severity":con["severity"], 
+#                     "key": con["key"], 
+#                     "startLine": con["textRange"]["startLine"] if "textRange" in con.keys() else None, 
+#                     "endLine": con["textRange"]["endLine"]if "textRange" in con.keys() else None, 
+#                     "status": con["status"], 
+#                     "message":con["message"], 
+#                     "effort":con["effort"] if "effort" in con else "0min", 
+#                     "type":con["type"],
+#                     "creationDate":con["creationDate"][:con["creationDate"].index('T')],
+#                     "rule":con["rule"]
+#                     })
+#                     if con["component"] not in srcNames:
+#                         srcNames[con["component"]] = []
+#         for i in raw: 
+#             if i["src"] in srcNames.keys():
+#                 srcNames[i["src"]].append(i)
+#         return srcNames
+# # data = specificProjectSourceCodeIssues('eshoponweb')
+
+
+# # exportExcel('eshoponweb',data, 'Valentia Cheng', {'type':['bug'], 'date':[]})

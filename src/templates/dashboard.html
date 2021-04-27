@@ -38,11 +38,193 @@ Sonar Tools - Dashboard
   opacity: 0.5;
   background: #ddd;
 }
+
+.overlay{
+    background-color: white;
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    height:100%;
+    top:0px;
+    left:0px;
+    z-index:2000;
+}
+
+
+.boxes {
+    height: 32px;
+    width: 32px;
+    position: relative;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    margin-top: 32px;
+    -webkit-transform: rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0px);
+    transform: rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0px);
+}
+.boxes .box {
+    width: 32px;
+    height: 32px;
+    top: 0px;
+    left: 0;
+    position: absolute;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+
+
+
+.boxes .box:nth-child(1) {
+    -webkit-transform: translate(100%, 0);
+    transform: translate(100%, 0);
+    -webkit-animation: box1 1s linear infinite;
+    animation: box1 1s linear infinite;
+}
+.boxes .box:nth-child(2) {
+    -webkit-transform: translate(0, 100%);
+    transform: translate(0, 100%);
+    -webkit-animation: box2 1s linear infinite;
+    animation: box2 1s linear infinite;
+}
+.boxes .box:nth-child(3) {
+    -webkit-transform: translate(100%, 100%);
+    transform: translate(100%, 100%);
+    -webkit-animation: box3 1s linear infinite;
+    animation: box3 1s linear infinite;
+}
+.boxes .box:nth-child(4) {
+    -webkit-transform: translate(200%, 0);
+    transform: translate(200%, 0);
+    -webkit-animation: box4 1s linear infinite;
+    animation: box4 1s linear infinite;
+}
+
+
+
+.boxes .box > div {
+    background: #5C8DF6;
+    --translateZ: 15.5px;
+    --rotateY: 0deg;
+    --rotateX: 0deg;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #5C8DF6;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    -webkit-transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ));
+    transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ));
+}
+
+.boxes .box > div:nth-child(1) {
+    top: 0;
+    left: 0;
+    background: #5C8DF6;
+}
+.boxes .box > div:nth-child(2) {
+    background: #145af2;
+    right: 0;
+    --rotateY: 90deg;
+}
+.boxes .box > div:nth-child(3) {
+    background: #447cf5;
+    --rotateX: -90deg;
+}
+.boxes .box > div:nth-child(4) {
+    background: #DBE3F4;
+    top: 0;
+    left: 0;
+    --translateZ: -90px;
+}
+
+
+
+
+
+@keyframes box1 {
+    0%,
+    50% {
+        transform: translate(100%, 0);
+    }
+    100% {
+        transform: translate(200%, 0);
+    }
+}
+
+@keyframes box2 {
+    0%{
+        transform: translate(0, 100%);
+    }
+    50% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(100%, 0);
+    }
+}
+
+@keyframes box3 {
+    0%,
+    50% {
+        transform: translate(100%, 100%);
+    }
+    100% {
+        transform: translate(0, 100%);
+    }
+}
+
+@keyframes box4 {
+    0%{
+        transform: translate(200%, 0);
+    }
+    50% {
+        transform: translate(200%, 100%);
+    }
+    100% {
+        transform: translate(100%, 100%);
+    }
+}
 </style>
 {% endblock %}
 
 {% block content %}
-
+<div class="overlay" style="display: none;">
+  <div style="position: absolute;top:100px">
+    Preparing Download... 
+  </div>
+  
+  <div class="boxes">
+    <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+  </div>
+</div>
 <!-- Header -->
 <!-- Header -->
 <div class="header bg-primary pb-6">
@@ -85,8 +267,8 @@ Sonar Tools - Dashboard
           </nav>
         </div>
         <div class="col-lg-6 col-5 text-right">
-          <!-- <a href="/dashboard_pdfLoad" class="btn btn-sm btn-neutral">Create PDF</a>
-          <a href="#" class="btn btn-sm btn-neutral">Create Executable File</a> -->
+          <a href="#" id="downloadPDF" class="btn btn-sm btn-neutral">Create PDF</a>
+          <a href="#" class="btn btn-sm btn-neutral" id="downloadEXE">Create Executable File</a>
         </div>
       </div>
 <!-- Card stats -->
@@ -196,12 +378,13 @@ Sonar Tools - Dashboard
         </div>
         <div class="col">
           <ul class="nav nav-pills justify-content-end">
-            <!-- <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-sales-dark" data-update='{"data":{"datasets":[{"data":[0, 20, 10, 30, 15, 40, 20, 60, 60]}]}}' data-prefix="$" data-suffix="k">
+            <li class="nav-item mr-2 mr-md-0">
               <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
-                <span class="d-none d-md-block">Month</span>
+                <span class="d-none d-md-block" onclick='window.location="/porjectIssuesChart"'>View All Projects</span>
                 <span class="d-md-none">M</span>
               </a>
             </li>
+            <!--
             <li class="nav-item" data-toggle="chart" data-target="#chart-sales-dark" data-update='{"data":{"datasets":[{"data":[0, 20, 5, 25, 10, 30, 15, 40, 40]}]}}' data-prefix="$" data-suffix="k">
               <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
                 <span class="d-none d-md-block">Week</span>
@@ -215,7 +398,7 @@ Sonar Tools - Dashboard
     <span style="display: none;" id="horizontalChartData">{{horizontalChartData}}</span>
     <div class="card-body">
       <!-- Chart -->
-      <div class="chart" style="height: {{horizontalChartData[0]|length * 33}}px;">
+      <div class="chart" style="height: {{10* 33}}px;">
         <!-- Chart wrapper -->
         <canvas id="chart-sales-dark" class="chart-canvas"></canvas>
       </div>
@@ -234,7 +417,7 @@ Sonar Tools - Dashboard
     </div>
     <div class="card-body">
       <!-- Chart -->
-      <div class="chart" style="height: {{horizontalChartData[0]|length * 33}}px;">
+      <div class="chart" style="height: {{10 * 33}}px;">
         <canvas id="chart-doughnut" class="chart-canvas"></canvas>
       </div>
     </div>
@@ -505,4 +688,79 @@ Sonar Tools - Dashboard
 {% endblock %}
 
 {% block scripts %}
+<script>
+    function downloadEXE(url) {
+      fetch(url) // for instance: /downloads/report_1/2020/2/Robert
+      .then(
+      function(response) {
+          if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: '+response.status);
+          return;
+          }
+
+          var fname = response.headers.get('my_filename'); // this was necessary because the native filename key was oddly concatinated with another
+
+          // Examine the response
+          response.blob().then(function(blob) {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          // the filename you want
+          a.download = fname;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.querySelector('.overlay').style.display = 'none'
+          });
+      }
+      )
+      .catch(function(err) {
+      console.log('Fetch Error :-S', err);
+      });
+  }
+
+  function downloadPDF(url) {
+      fetch(url) // for instance: /downloads/report_1/2020/2/Robert
+      .then(
+      function(response) {
+          if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: '+response.status);
+          return;
+          }
+
+          var fname = response.headers.get('my_filename'); // this was necessary because the native filename key was oddly concatinated with another
+
+          // Examine the response
+          response.blob().then(function(blob) {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          // the filename you want
+          a.download = fname;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.querySelector('.overlay').style.display = 'none'
+          });
+      }
+      )
+      .catch(function(err) {
+      console.log('Fetch Error :-S', err);
+      });
+  }
+
+
+  document.querySelector('#downloadEXE').addEventListener('click', event => {
+    document.querySelector('.overlay').style.display = ''
+    downloadEXE('/zipFile')
+  })
+
+  document.querySelector('#downloadPDF').addEventListener('click', event => {
+    document.querySelector('.overlay').style.display = ''
+    downloadPDF('/getDashboardPDF')
+  })
+
+</script>
 {% endblock %}

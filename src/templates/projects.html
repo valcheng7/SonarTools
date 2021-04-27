@@ -503,7 +503,7 @@ Sonar Tools - Projects
                 </div>
                 </div>
             </div>
-            <a href="{{url_for('download_CSVfile')}}" class="btn btn-sm btn-neutral">Download CSV</a>
+            <a id="downloadExcel" class="btn btn-sm btn-neutral">Download CSV</a>
             <a href="{{url_for('download_PDFfile')}}" class="btn btn-sm btn-neutral">Download PDF</a>
             <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
             </div>
@@ -1448,6 +1448,41 @@ function resEnded() {
 //         }
 //     });
 // });
+
+function downloadExcel(url) {
+      fetch(url) // for instance: /downloads/report_1/2020/2/Robert
+      .then(
+      function(response) {
+          if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: '+response.status);
+          return;
+          }
+
+          var fname = response.headers.get('my_filename'); // this was necessary because the native filename key was oddly concatinated with another
+
+          // Examine the response
+          response.blob().then(function(blob) {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          // the filename you want
+          a.download = fname;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          });
+      }
+      )
+      .catch(function(err) {
+      console.log('Fetch Error :-S', err);
+      });
+  }
+
+  document.querySelector('#downloadExcel').addEventListener('click', event => {
+    downloadExcel('/download_CSVfile')
+  })
+
 
 </script>
 {% endblock %}

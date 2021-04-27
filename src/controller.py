@@ -82,39 +82,6 @@ def inject_botResponse():
     global output
     return dict(result=output)
 
-def write_csv(params):
-    outWorkbook = xlsxwriter.Workbook("src/static/downloads/csv/project_issues.xlsx")
-    outSheet = outWorkbook.add_worksheet()
-    caps = string.ascii_uppercase
-    if params != None:
-        li = excelFilterProjects(project_data, params)
-    else:
-        main = project_data
-        print(main)
-        li = []
-        for i, j in enumerate(main):
-            dic = []
-            dic.append(j["projectName"])
-            dic.append(j["status"])
-            dic.append(j["bugs"])
-            dic.append(j["vulnerabilities"])
-            if j["hotspotPercentage"] == 0:
-                dic.append(f'-')
-            else:
-                dic.append(f'{j["hotspotPercentage"]}%')
-            dic.append(j["code_smells"])
-            dic.append(f'{j["coverage"]}%')
-            dic.append(f'{j["duplicatePercentage"]}%')
-            dic.append(f'{j["languages"][1]} lines')
-            li.append(dic)
-    print(li)
-    for i, j in enumerate(['Project', 'Status', 'Bugs', 'Vulnerabilities', 'Hotspots Reviewed', 'Code Smells', 'Coverage', 'Duplications', 'Language']):
-            outSheet.write(f"{caps[i]}1", j)
-    for i in range(len(li)):
-        for k in range(9):
-            outSheet.write(i+1, k, li[i][k])
-    outWorkbook.close()
-
 # For project route
 project_data = []
 
@@ -163,7 +130,7 @@ languages = None
 # Project Sorting route 
 sortMethod = None
 
-# Chatbot variables
+# Chatbot variables #
 output = [("message stark", {"text": "Hi, how may I assist you?"})]
 latest = []
 
@@ -224,6 +191,7 @@ def dashboard():
     global all_languages
     global projs
     global bubbleData
+    data = [horizontalChartData[0][0:10], horizontalChartData[1][0:10]]
     # numOfProjects = 10
     # codeSmells = 5002
     # vulnerabilities = 600
@@ -233,7 +201,7 @@ def dashboard():
         if "user_id" not in session:
             return redirect(url_for('login'))
         else:
-            return render_template('dashboard.html', bugs=bugs, vulnerabilities=vulnerabilities, codeSmells=codeSmells, numOfProjects=numOfProjects, horizontalChartData=horizontalChartData, languages=all_languages,projs=projs,bubbleData=bubbleData)
+            return render_template('dashboard.html', bugs=bugs, vulnerabilities=vulnerabilities, codeSmells=codeSmells, numOfProjects=numOfProjects, horizontalChartData=data, languages=all_languages,projs=projs,bubbleData=bubbleData)
 
 
 
@@ -511,6 +479,11 @@ def filter():
     print(params)   
     return "success"
 
+@app.route('/porjectIssuesChart')
+def projectIssuesChart():
+    global horizontalChartData
+    return render_template('projectIssuesChart.html', horizontalChartData=horizontalChartData)
+
 # Filters route for /issues 
 @app.route('/filters2')
 def filter2():
@@ -544,7 +517,7 @@ def login():
                 email = data['email']
                 groups = data['groups']
                 curr_user = {'name': name, 'login': login, 'email': email, 'groups': groups}
-                flash('You have successfully logged into Sonar Tools!', 'success')
+                flash('You have successfully logged into Cyros!', 'success')
                 return redirect(url_for('load5'))
             else:
                 flash('Incorrect login or password, please check your credentials again.', 'danger')
@@ -568,7 +541,10 @@ def download_CSVfile():
     global project_data
     exportExcelProjects(curr_user['name'], project_data)
     file_dest = "../src/static/downloads/csv/projects.xlsx"
-    return send_file(file_dest, as_attachment=True, cache_timeout=0)
+    fname = 'Projects'
+    response = make_response(send_file(file_dest, cache_timeout=0))
+    response.headers['my_filename'] = fname # I had problems with how the native "filename" key
+    return response
 
 # Download CSV file
 @app.route('/download_CSVfile2')
@@ -583,7 +559,10 @@ def download_CSVfile2():
     else:
         parameters = params2
     exportExcel(projectName, project_issues_data, curr_user['name'], parameters)
-    return send_file(file_dest, as_attachment=True, cache_timeout=0)
+    fname = 'ProjectIssues'
+    response = make_response(send_file(file_dest, cache_timeout=0))
+    response.headers['my_filename'] = fname # I had problems with how the native "filename" key
+    return response
 
 # Download Projects PDF file
 @app.route('/download_PDFfile')
@@ -637,7 +616,11 @@ def download_PDFfile2():
     createIssuesPDF2(data, raw)
     createIssuesPDF3(project_issues_data)
     mergedPDF()
-    return send_file(file_dest, as_attachment=True, cache_timeout=0)
+    fname = 'ProjectIssues'
+    response = make_response(send_file(file_dest, cache_timeout=0))
+    response.headers['my_filename'] = fname # I had problems with how the native "filename" key
+    return response    
+    # return send_file(file_dest, as_attachment=True, cache_timeout=0)
 
 # @app.route('/getUsername')
 # def getUsername():
@@ -749,6 +732,11 @@ def code_issues():
             global projectName
             return render_template('code_issues.html', data=project_file_data, file=fileName, line=line, project=project, projectName=projectName)
 
+@app.route('/test')
+def test():
+    client = sonarAPI(curr_login, curr_password)
+    data = client.getProjectsQualityGate()
+    return render_template('test.html', text=data)
 
 # Chatbot #
 @app.route('/result', methods=["POST", "GET"])
@@ -818,13 +806,6 @@ def fetch():
             if count > 1:
                 latest = [latest[0]]
         return str(latest)
-
-@app.route('/test')
-def test():
-    client = sonarAPI(curr_login, curr_password)
-    data = client.getProjectsQualityGate()
-    return render_template('test.html', text=data)
-
 
 """Error Handling Routes"""
 

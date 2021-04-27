@@ -14,7 +14,6 @@ Sonar Tools - Issues
      margin:10px;
      }
 
-
    /* Create two equal columns that floats next to each other */
  .column {
    float: left;
@@ -223,7 +222,41 @@ Sonar Tools - Issues
   </div>
 </div>
 </div>
+
 {% endif %}
+
+<div class="overlay" id="overlay2" style="display: none;">
+  <div style="position: absolute;top:100px">
+    Preparing Download... 
+  </div>
+  
+  <div class="boxes">
+    <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    <div class="box">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+  </div>
+</div>
 
 <!-- Header -->
 <!-- Header -->
@@ -342,35 +375,9 @@ Sonar Tools - Issues
 
                     <!-- <br>
                     <br> -->
+                       
                     <div class='column'>
-
-                      <span style="color: #5e72e4;">
-                        <i class="fas fa-tools"></i>
-                      </span>
-                      
-                      <span class="name mb-0 text-sm"> Resolution</span>
-                      <br>
-                      
-                      <div class="custom-control custom-control-alternative custom-checkbox inline">
-                          <input class="custom-control-input" id="unresolved" type="checkbox">
-                          <label class="custom-control-label" for="unresolved">
-                            <span class="text-muted">Unresolved</span>
-                          </label>
   
-                      </div>
-  
-                      <div class="custom-control custom-control-alternative custom-checkbox inline">
-                      <input class="custom-control-input" id="fixed" type="checkbox">
-                          <label class="custom-control-label" for="fixed">
-                            <span class="text-muted">Fixed</span>
-                          </label>
-                      </div>     
-                    </div>
-
-                   
-                    
-                    <div class='column'>
-
                       <span style="color: #5e72e4;">
                         <i class="fas fa-code"></i>
                       </span>
@@ -451,8 +458,8 @@ Sonar Tools - Issues
             </div>
             </div>
         </div>
-            <a href="{{url_for('download_CSVfile2')}}" class="btn btn-sm btn-neutral">Download CSV</a>
-            <a href="{{url_for('download_PDFfile2')}}" class="btn btn-sm btn-neutral">Download PDF</a>
+            <a class="btn btn-sm btn-neutral" id="downloadExcel">Download CSV</a>
+            <a class="btn btn-sm btn-neutral" id="downloadPDF">Download PDF</a>
             <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
           </div>
         </div>
@@ -1041,6 +1048,80 @@ Sonar Tools - Issues
 
 {% block scripts %}
 <script src="{{url_for('static', filename='js/issues_filter.js')}}"></script>
+<script>
+function downloadPDF(url) {
+    fetch(url) // for instance: /downloads/report_1/2020/2/Robert
+    .then(
+    function(response) {
+        if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: '+response.status);
+        return;
+        }
+
+        var fname = response.headers.get('my_filename'); // this was necessary because the native filename key was oddly concatinated with another
+
+        // Examine the response
+        response.blob().then(function(blob) {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        // the filename you want
+        a.download = fname;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.querySelector('#overlay2').style.display = 'none'
+        });
+    }
+    )
+    .catch(function(err) {
+    console.log('Fetch Error :-S', err);
+    });
+}
+
+function downloadExcel(url) {
+      fetch(url) // for instance: /downloads/report_1/2020/2/Robert
+      .then(
+      function(response) {
+          if (response.status !== 200) {
+          console.log('Looks like there was a problem. Status Code: '+response.status);
+          return;
+          }
+
+          var fname = response.headers.get('my_filename'); // this was necessary because the native filename key was oddly concatinated with another
+
+          // Examine the response
+          response.blob().then(function(blob) {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          // the filename you want
+          a.download = fname;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.querySelector('#overlay2').style.display = 'none'
+          });
+      }
+      )
+      .catch(function(err) {
+      console.log('Fetch Error :-S', err);
+      });
+  }
+
+document.querySelector('#downloadPDF').addEventListener('click', event => {
+    document.querySelector('#overlay2').style.display = ''
+    downloadPDF('/download_PDFfile2')
+  })
+
+document.querySelector('#downloadExcel').addEventListener('click', event => {
+    document.querySelector('#overlay2').style.display = ''
+    downloadPDF('/download_CSVfile2')
+  })
+</script>
+
 {% endblock %}
 
 

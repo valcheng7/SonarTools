@@ -4,7 +4,7 @@
   /* Chatbot CSS*/
   
   .chatbotContainer .row div:nth-child(even){
-    margin-left:0!important;
+    margin-right:14px!important;
   }
   
   .chatbotContainer .row div:nth-child(odd){
@@ -20,7 +20,8 @@
   }
   
   .message.stark {
-    word-wrap: break-word!important
+    word-wrap: break-word!important;
+    margin-right: 14px!important;
   }
   
   .sidebar {
@@ -145,7 +146,7 @@
   }
   /* The popup chat - hidden by default */
   .chat-popup {
-    display: none;
+    display: block;
     position: fixed;
     bottom: 0;
     right: 15px;
