@@ -1,0 +1,1453 @@
+{% extends "includes/layout.html" %}
+{% block title %}
+Sonar Tools - Projects
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .inline { 
+      display: inline-block; 
+      margin:10px;
+      }
+  
+    .table-responsv
+  
+  /* .far .fa-check-circle {
+      color: blue;
+  } /
+  / .table_font {
+      font-size: 1.25rem !important;
+  } /
+  
+  / Create two equal columns that floats next to each other /
+  .column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    / height: 300px; /
+  }
+  / Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  .fa-ul {
+    margin: 0;
+  }
+  .languageLi {
+    padding-left: 45px;
+  }
+  
+  .fa-li {
+    padding-left: 45px;
+    color:#5e72e4
+  }
+  
+  #btnSort {
+    max-height: 28px;
+    line-height:18px;
+    margin-left: 0;
+    background:white;
+    color:#5e72e4;
+  }
+  
+  </style>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<!-- Header -->
+<div class="header bg-primary pb-6">
+    <div class="container-fluid">
+        <div class="header-body">
+        <div class="row align-items-center py-4">
+            <div class="col-lg-6 col-7">
+            <!-- <h6 class="h2 text-white d-inline-block mb-0">Projects</h6> -->
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                <!-- <li class="breadcrumb-item"><a href="#">Tables</a></li> -->
+                <li class="breadcrumb-item active" aria-current="page">Projects</li>
+                </ol>
+            </nav>
+            </div>
+            <div class="col-lg-6 col-5 text-right">
+            <!-- <a href="#" class="btn btn-sm btn-neutral">New</a> -->
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#exampleModal">
+                Filters
+            </button>
+            
+            <!-- Modal -->
+            <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Filters</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div style='text-align: left;' class="modal-body">
+
+                      <div class='row'>
+                        <div class='column'>
+                        <span style="color: #5e72e4;">
+                            <i class="far fa-check-circle"></i>
+                        </span>
+                        
+                        <span class="name mb-0 text-sm">Quality Gate</span>
+                        <br>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input status1" id="pass" type="checkbox">
+                            <label class="custom-control-label" for="pass">
+                              <span class="text-muted">Passed</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input status1" id="fail" type="checkbox">
+                            <label class="custom-control-label" for="fail">
+                              <span class="text-muted">Failed</span>
+                            </label>
+                        </div>
+                      </div>
+
+                        <!-- <br>
+                        <br> -->
+                      <div class='column'>
+
+                        <span style="color: #5e72e4;">
+                            <i class="fas fa-bug"></i>
+                        </span>
+                        
+                        <span class="name mb-0 text-sm"> Reliability (Bugs)</span>
+                        <br>
+                        
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input bugs" id="bugs_a" type="checkbox">
+                            <label class="custom-control-label" for="bugs_a">
+                              <span class="text-muted">A</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input bugs" id="bugs_b" type="checkbox">
+                            <label class="custom-control-label" for="bugs_b">
+                              <span class="text-muted">B</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input bugs" id="bugs_c" type="checkbox">
+                            <label class="custom-control-label" for="bugs_c">
+                              <span class="text-muted">C</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input bugs" id="bugs_d" type="checkbox">
+                            <label class="custom-control-label" for="bugs_d">
+                              <span class="text-muted">D</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input bugs" id="bugs_e" type="checkbox">
+                            <label class="custom-control-label" for="bugs_e">
+                              <span class="text-muted">E</span>
+                            </label>
+                        </div>
+                      </div>
+
+                        <!-- <br>
+                        <br> -->
+                        <div class='column'>
+
+                        <span style="color: #5e72e4;">
+                          <i class="fas fa-unlock"></i>
+                        </span>
+                        
+                        <span class="name mb-0 text-sm"> Security (Vulnerabilities)</span>
+                        <br>
+                        
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input security" id="sec_a" type="checkbox">
+                            <label class="custom-control-label" for="sec_a">
+                              <span class="text-muted">A</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input security" id="sec_b" type="checkbox">
+                            <label class="custom-control-label" for="sec_b">
+                              <span class="text-muted">B</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input security" id="sec_c" type="checkbox">
+                            <label class="custom-control-label" for="sec_c">
+                              <span class="text-muted">C</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input security" id="sec_d" type="checkbox">
+                            <label class="custom-control-label" for="sec_d">
+                              <span class="text-muted">D</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input security" id="sec_e" type="checkbox">
+                            <label class="custom-control-label" for="sec_e">
+                              <span class="text-muted">E</span>
+                            </label>
+                        </div>
+                      </div>
+
+                      <div class='column'>
+
+                        <span style="color: #5e72e4;">
+                          <i class="fas fa-unlock"></i>
+                        </span>
+                        
+                        <span class="name mb-0 text-sm"> Security Review (Security Hotspots)</span>
+                        <br>
+                        
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input securityReview" id="secR_80" type="checkbox">
+                            <label class="custom-control-label" for="secR_80">
+                              <span class="text-muted">&ge; 80%</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input securityReview" id="secR_70_80" type="checkbox">
+                            <label class="custom-control-label" for="secR_70_80">
+                              <span class="text-muted">70% - 80%</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input securityReview" id="secR_50_70" type="checkbox">
+                            <label class="custom-control-label" for="secR_50_70">
+                              <span class="text-muted">50% - 70%</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input securityReview" id="secR_30_50" type="checkbox">
+                            <label class="custom-control-label" for="secR_30_50">
+                              <span class="text-muted">30% - 50%</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input securityReview" id="secR_30" type="checkbox">
+                            <label class="custom-control-label" for="secR_30">
+                              <span class="text-muted">&lt; 30%</span>
+                            </label>
+                        </div>
+                      </div>
+                      
+                      <div class='column'>
+
+                        <span style="color: #5e72e4;">
+                          <i class="fas fa-unlock"></i>
+                        </span>
+                        
+                        <span class="name mb-0 text-sm">Maintability (Code Smells)</span>
+                        <br>
+                        
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input maintability" id="main_a" type="checkbox">
+                            <label class="custom-control-label" for="main_a">
+                              <span class="text-muted">A</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input maintability" id="main_b" type="checkbox">
+                            <label class="custom-control-label" for="main_b">
+                              <span class="text-muted">B</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input maintability" id="main_c" type="checkbox">
+                            <label class="custom-control-label" for="main_c">
+                              <span class="text-muted">C</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input maintability" id="main_d" type="checkbox">
+                            <label class="custom-control-label" for="main_d">
+                              <span class="text-muted">D</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input maintability" id="main_e" type="checkbox">
+                            <label class="custom-control-label" for="main_e">
+                              <span class="text-muted">E</span>
+                            </label>
+                        </div>
+                      </div>
+
+                      <div class='column'>
+
+                        <span style="color: #5e72e4;">
+                          <i class="fas fa-unlock"></i>
+                        </span>
+                        
+                        <span class="name mb-0 text-sm"> Coverage </span>
+                        <br>
+                        
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input coverage" id="coverage_80" type="checkbox">
+                            <label class="custom-control-label" for="coverage_80">
+                              <span class="text-muted">&ge; 80%</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input coverage" id="coverage_70_80" type="checkbox">
+                            <label class="custom-control-label" for="coverage_70_80">
+                              <span class="text-muted">70% - 80%</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input coverage" id="coverage_50_70" type="checkbox">
+                            <label class="custom-control-label" for="coverage_50_70">
+                              <span class="text-muted">50% - 70%</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input coverage" id="coverage_30_50" type="checkbox">
+                            <label class="custom-control-label" for="coverage_30_50">
+                              <span class="text-muted">30% - 50%</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input coverage" id="coverage_30" type="checkbox">
+                            <label class="custom-control-label" for="coverage_30">
+                              <span class="text-muted">&lt; 30%</span>
+                            </label>
+                        </div>
+                      </div>
+
+                      <div class='column'>
+
+                        <span style="color: #5e72e4;">
+                          <i class="fas fa-unlock"></i>
+                        </span>
+                        
+                        <span class="name mb-0 text-sm">Duplications</span>
+                        <br>
+                        
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input duplication" id="duplications_3" type="checkbox">
+                            <label class="custom-control-label" for="duplications_3">
+                              <span class="text-muted">&lt; 3%</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input duplication" id="duplications_3_5" type="checkbox">
+                            <label class="custom-control-label" for="duplications_3_5">
+                              <span class="text-muted">3% - 5%</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input duplication" id="duplications_5_10" type="checkbox">
+                            <label class="custom-control-label" for="duplications_5_10">
+                              <span class="text-muted">5% - 10%</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input duplication" id="duplications_10_20" type="checkbox">
+                            <label class="custom-control-label" for="duplications_10_20">
+                              <span class="text-muted">10% - 20%</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input duplication" id="duplications_20" type="checkbox">
+                            <label class="custom-control-label" for="duplications_20">
+                              <span class="text-muted">&gt; 20%</span>
+                            </label>
+                        </div>
+                      </div>
+
+                      <div class='column'>
+
+                        <span style="color: #5e72e4;">
+                          <i class="fas fa-unlock"></i>
+                        </span>
+                        
+                        <span class="name mb-0 text-sm"> Size </span>
+                        <br>
+                        
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input size" id="size_1000" type="checkbox">
+                            <label class="custom-control-label" for="size_1000">
+                              <span class="text-muted"> &lt; 1K </span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input size" id="size_1000_10000" type="checkbox">
+                            <label class="custom-control-label" for="size_1000_10000">
+                              <span class="text-muted">1K - 10K</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input size" id="size_10000_100000" type="checkbox">
+                            <label class="custom-control-label" for="size_10000_100000">
+                              <span class="text-muted">10K - 100K</span>
+                            </label>
+
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input size" id="size_100000_500000" type="checkbox">
+                            <label class="custom-control-label" for="size_100000_500000">
+                              <span class="text-muted">100K - 500K</span>
+                            </label>
+                        </div>
+
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input size" id="size_500000" type="checkbox">
+                            <label class="custom-control-label" for="size_500000">
+                              <span class="text-muted">&gt; 500K </span>
+                            </label>
+                        </div>
+                      </div>
+
+                      <div class='column'>
+
+                        <span style="color: #5e72e4;">
+                          <i class="fas fa-unlock"></i>
+                        </span>
+                        
+                        <span class="name mb-0 text-sm">Languages</span>
+                        <br>
+                        {% for i in languages %}
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input languages" id="languages_{{i}}" type="checkbox">
+                            <label class="custom-control-label" for="languages_{{i}}">
+                            {% if i == "cs" %}
+                            <span class="text-muted">C#</span>
+                            {% elif i =="css"  %}
+                            <span class="text-muted">CSS</span>
+                            {% elif i =="js"  %}
+                            <span class="text-muted">JavaScript</span>
+                            {% elif i =="web"  %}
+                            <span class="text-muted">HTML</span>
+                            {% elif i =="ruby"  %}
+                            <span class="text-muted">Ruby</span>
+                            {% elif i =="vbnet"  %}
+                            <span class="text-muted">VB.NET</span>
+                            {% elif i =="xml"  %}
+                            <span class="text-muted">XML</span>
+                            {% else %}
+                            <span class="text-muted">{{i}}</span>
+                            {%endif%}
+                            </label>
+                        </div>
+                        {% endfor %}  
+                        
+                      </div>
+
+
+                      </div>
+                          
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" id="reset">Reset all filters</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="filter-button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <a href="{{url_for('download_CSVfile')}}" class="btn btn-sm btn-neutral">Download CSV</a>
+            <a href="{{url_for('download_PDFfile')}}" class="btn btn-sm btn-neutral">Download PDF</a>
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<span id="params" style="display: none;">{{params}}</span>
+<!-- Page content -->
+<div class="container-fluid mt--6" >
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <!-- Card header -->
+          <div class="card-header border-0" style='padding-bottom: 2px; padding-top: 6px'>
+            <div class="row align-items-center">
+              <div class="col">
+                <h3 class="mb-0">Projects</h3>
+              </div>
+             
+              <div class="col text-right" >
+               
+                    <div class="form-group inline">
+                      <div class="input-group input-group-merge">
+                          <div class="input-group-prepend" style="height: 31.3px;">
+                              <span class="input-group-text " id="basic-addon1"><i class="fas fa-search" style='color: #5e72e4'></i></span>
+                          </div>
+                          <input type="text" class="form-control" id="search" style="height: 31.3px;" placeholder="Search" aria-label="Username" aria-describedby="basic-addon1">
+                      </div>
+                  </div>
+                  <div class="wrapper">
+                  <div class="form-group inline" id="wrapper1" style='padding-right: 0'>
+                    <label for="exampleFormControlSelect1" id="label" style='font-size: small;'>Sort by: </label>
+                  </div>
+
+                  <div class="form-group inline" id="wrapper2" style="margin-right: 0;">
+                    <select class="form-control form-control-sm" id="exampleFormControlSelect1" value="Name">
+                      <option>Select an option</option>
+                      <option>Name</option>
+                      <option>Reliability</option>
+                      <option>Security</option>
+                      <option>Maintainability</option>
+                      <option>Coverage</option>
+                      <option>Duplications</option>
+                      <option>Size</option>
+                    </select>
+                  </div>
+                  <button id="btnSort"  id="wrapper3" class="btn btn-sm inline"><i class="fas fa-sort-amount-down-alt"></i></button>
+                  </div>
+                  </div>
+            </div>
+          </div>
+          <!-- Light table -->
+          <div class="table-responsive">
+            <table class="table align-items-center table-flush">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col" class="sort" data-sort="name">Project</th>
+                  <th scope="col" class="sort" data-sort="budget">Status</th>
+                  <th scope="col" class="sort" data-sort="status">Bugs</th>
+                  <!-- <th scope="col">Users</th> -->
+                  <th scope="col" class="sort" data-sort="completion">Vulnerabilities</th>
+                  <th scope="col">Hotspots Reviewed</th>
+                  <th scope="col" class="sort" data-sort="name">Code Smells</th>
+                  <th scope="col" class="sort" data-sort="budget">Coverage</th>
+                  <th scope="col" class="sort" data-sort="status">Duplications</th>
+                  <th scope="col" class="sort" data-sort="status">Language</th>
+                  
+                  
+                </tr>
+              </thead>
+              <tbody class="list">
+                {% for i in data %}
+                <tr class="projectRows">
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <!-- <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src="../static/img/theme/bootstrap.jpg">
+                      </a> -->
+                      <div class="media-body">
+                        <span id='projects' class="name mb-0 text-sm"><a href="/project_issues_loading?source={{i['projectName']}}">{{ i['projectName'] }}</a></span>
+                      </div>
+                    </div>
+                  </th>
+                  <td>
+                    <span class="badge badge-dot mr-4">
+                      {% if i["status"] == "Passed"%}
+                      <i class="bg-success"></i>
+                      <span class="status" id="pass">{{i["status"]}}</span>
+                      {% else %}
+                      <i class="bg-warning"></i>
+                      <span class="status" id="fail">{{i["status"]}}</span>
+                      {% endif %}
+                    </span>
+                  </td>
+                  <td class="bugs ">
+                      {% if i["reliabilityRating"] == '1.0' %}
+                      <img alt="Image placeholder" src="../static/img/letters/a.png" width='25rem' id="a">
+                      {% elif i["reliabilityRating"] == '2.0' %}
+                      <img alt="Image placeholder" src="../static/img/letters/b.png" width='25rem' id="b">
+                      {% elif i["reliabilityRating"] == '3.0' %}
+                      <img alt="Image placeholder" src="../static/img/letters/c.png" width='25rem' id="c">
+                      {% elif i["reliabilityRating"] == '4.0' %}
+                      <img alt="Image placeholder" src="../static/img/letters/d.png" width='25rem' id="d">
+                      {% else %}
+                      <img alt="Image placeholder" src="../static/img/letters/e.png" width='25rem' id="e">
+                      {% endif %}
+                    &nbsp; {{i["bugs"]}}
+                  </td>
+                  
+                  <!-- <td> -->
+                    <!-- <img alt="Image placeholder" src="../static/img/letters/b.png" width='25rem'>
+                    &nbsp; 0 -->
+                    <!-- <div class="avatar-group">
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
+                        <img alt="Image placeholder" src="../static/img/theme/team-1.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
+                        <img alt="Image placeholder" src="../static/img/theme/team-2.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
+                        <img alt="Image placeholder" src="../static/img/theme/team-3.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
+                        <img alt="Image placeholder" src="../static/img/theme/team-4.jpg">
+                      </a>
+                    </div> -->
+                  <!-- </td> -->
+                  <td>
+                    {% if i["securityRating"] == '1.0' %}
+                    <img alt="Image placeholder" src="../static/img/letters/a.png" width='25rem' id="a">
+                    {% elif i["securityRating"] == '2.0' %}
+                    <img alt="Image placeholder" src="../static/img/letters/b.png" width='25rem' id="b">
+                    {% elif i["securityRating"] == '3.0' %}
+                    <img alt="Image placeholder" src="../static/img/letters/c.png" width='25rem' id="c">
+                    {% elif i["securityRating"] == '4.0' %}
+                    <img alt="Image placeholder" src="../static/img/letters/d.png" width='25rem' id="d">
+                    {% else %}
+                    <img alt="Image placeholder" src="../static/img/letters/e.png" width='25rem' id="e">
+                    {% endif %}
+                    &nbsp; {{ i["vulnerabilities"] }}
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      {% if i["securityReviewRating"] == '1.0' %}
+                      <img alt="Image placeholder" src="../static/img/letters/a.png" width='25rem' id="a">
+                      {% elif i["securityReviewRating"] == '2.0' %}
+                      <img alt="Image placeholder" src="../static/img/letters/b.png" width='25rem' id="b">
+                      {% elif i["securityReviewRating"] == '3.0' %}
+                      <img alt="Image placeholder" src="../static/img/letters/c.png" width='25rem' id="c">
+                      {% elif i["securityReviewRating"] == '4.0' %}
+                      <img alt="Image placeholder" src="../static/img/letters/d.png" width='25rem' id="d">
+                      {% else %}
+                      <img alt="Image placeholder" src="../static/img/letters/e.png" width='25rem' id="e">
+                      {% endif %}
+                      &nbsp;&nbsp;
+                      {% if i["hotspotPercentage"] == 0 %}
+                      <span class="completion mr-2">-</span>
+                      {% else %}
+                      <span class="completion mr-2">{{i["hotspotPercentage"]}}%</span>
+                      {% endif  %}
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="{{i['hotspotPercentage']}}" aria-valuemin="0" aria-valuemax="100" style="width: {{i['hotspotPercentage']}}%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    {% if i["maintainabilityRating"] == '1.0' %}
+                    <img alt="Image placeholder" src="../static/img/letters/a.png" width='25rem' id="a">
+                    {% elif i["maintainabilityRating"] == '2.0' %}
+                    <img alt="Image placeholder" src="../static/img/letters/b.png" width='25rem' id="b">
+                    {% elif i["maintainabilityRating"] == '3.0' %}
+                    <img alt="Image placeholder" src="../static/img/letters/c.png" width='25rem' id="c">
+                    {% elif i["maintainabilityRating"] == '4.0' %}
+                    <img alt="Image placeholder" src="../static/img/letters/d.png" width='25rem' id="d">
+                    {% else %}
+                    <img alt="Image placeholder" src="../static/img/letters/e.png" width='25rem' id="e">
+                    {% endif %}
+                    &nbsp; {{i["code_smells"]}}
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">{{i["coverage"]}}%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{i['coverage']}}%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">{{i["duplicatePercentage"]}}%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{i['duplicatePercentage']}}%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <i class="fas fa-code" style='color:#5e72e4'></i>
+                    &nbsp;
+                    {{ i["languages"][1] }}
+                    &nbsp; &nbsp;
+
+                    <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{i['proj_id']}}" style='padding: 2px; height: 22px; background-color: white; border-color: white;'>
+                        <i class="fas fa-angle-down fa-lg" style='color: grey'></i>
+                      </button>
+
+                      <!-- Modal -->
+                      <div class="modal fade" id="{{i['proj_id']}}" tabindex="-1" role="dialog" aria-labelledby="languageModal" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="languageModal">Languages</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <ul class="fa-ul">
+                              {% for i in i["codeLanguages"] %}
+                                {% if i == "cs" %}
+                                <li class='languageLi'><span class="fa-li"><i class="fas fa-code"></i></span>C#</li>
+                                <hr style='margin-left: 0 !important;'>
+                                {% elif i =="css"  %}
+                                <li class='languageLi'><span class="fa-li"><i class="fas fa-code"></i></span>CSS</li>
+                                <hr style='width: 100%'>
+                                {% elif i =="js"  %}
+                                <li class='languageLi'><span class="fa-li"><i class="fas fa-code"></i></span>JavaScript</li>
+                                <hr style='width: 100%'>
+                                {% elif i =="web"  %}
+                                <li class='languageLi'><span class="fa-li"><i class="fas fa-code"></i></span>HTML</li>
+                                <hr style='width: 100%'>
+                                {% elif i =="ruby"  %}
+                                <li class='languageLi'><span class="fa-li"><i class="fas fa-code"></i></span>Ruby</li>
+                                <hr style='width: 100%'>
+                                {% elif i =="vbnet"  %}
+                                <li class='languageLi'><span class="fa-li"><i class="fas fa-code"></i></span> VB.NET</li>
+                                <hr style='width: 100%'>
+                                {% elif i =="xml"  %}
+                                <li class='languageLi'><span class="fa-li"><i class="fas fa-code"></i></span>XML</li>
+                                <hr style='width: 100%'>
+                                {% else %}
+                                <li class='languageLi'><span class="fa-li"><i class="fas fa-code"></i></span>{{i}}</li>
+                                <hr style='width: 100%'>
+                                {% endif %}
+                              {% endfor %}
+                              </ul>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    <!-- <div class="dropdown">
+                      <a class="btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-angle-down fa-lg"></i>
+                      </a>
+                      
+                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                          {% for i in i["codeLanguages"] %}
+                            {% if i == "cs" %}
+                            <a class="dropdown-item" href="#">C#</a>
+                            {% elif i =="css"  %}
+                            <a class="dropdown-item" href="#">CSS</a>
+                            {% elif i =="js"  %}
+                            <a class="dropdown-item" href="#">JavaScript</a>
+                            {% elif i =="web"  %}
+                            <a class="dropdown-item" href="#">HTML</a>
+                            {% elif i =="ruby"  %}
+                            <a class="dropdown-item" href="#">Ruby</a>
+                            {% elif i =="vbnet"  %}
+                            <a class="dropdown-item" href="#">VB.NET</a>
+                            {% elif i =="xml"  %}
+                            <a class="dropdown-item" href="#">XML</a>
+                            {% else %}
+                            <a class="dropdown-item" href="#">{{i}}</a>
+                            {%endif%}
+                            {% endfor %}
+                      </div>
+                  </div> -->
+                  </td>
+                </tr>
+
+              {% endfor %}
+                
+                <!-- <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src="../static/img/theme/angular.jpg">
+                      </a>
+                      <div class="media-body">
+                        <span class="name mb-0 text-sm">Angular Now UI Kit PRO</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td class="budget">
+                    $1800 USD
+                  </td>
+                  <td>
+                    <span class="badge badge-dot mr-4">
+                      <i class="bg-success"></i>
+                      <span class="status">completed</span>
+                    </span>
+                  </td>
+                  <td>
+                    <div class="avatar-group">
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
+                        <img alt="Image placeholder" src="../static/img/theme/team-1.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
+                        <img alt="Image placeholder" src="../static/img/theme/team-2.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
+                        <img alt="Image placeholder" src="../static/img/theme/team-3.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
+                        <img alt="Image placeholder" src="../static/img/theme/team-4.jpg">
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">100%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-right">
+                    <div class="dropdown">
+                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src="../static/img/theme/sketch.jpg">
+                      </a>
+                      <div class="media-body">
+                        <span class="name mb-0 text-sm">Black Dashboard</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td class="budget">
+                    $3150 USD
+                  </td>
+                  <td>
+                    <span class="badge badge-dot mr-4">
+                      <i class="bg-danger"></i>
+                      <span class="status">delayed</span>
+                    </span>
+                  </td>
+                  <td>
+                    <div class="avatar-group">
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
+                        <img alt="Image placeholder" src="../static/img/theme/team-1.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
+                        <img alt="Image placeholder" src="../static/img/theme/team-2.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
+                        <img alt="Image placeholder" src="../static/img/theme/team-3.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
+                        <img alt="Image placeholder" src="../static/img/theme/team-4.jpg">
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">72%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-right">
+                    <div class="dropdown">
+                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src="../static/img/theme/react.jpg">
+                      </a>
+                      <div class="media-body">
+                        <span class="name mb-0 text-sm">React Material Dashboard</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td class="budget">
+                    $4400 USD
+                  </td>
+                  <td>
+                    <span class="badge badge-dot mr-4">
+                      <i class="bg-info"></i>
+                      <span class="status">on schedule</span>
+                    </span>
+                  </td>
+                  <td>
+                    <div class="avatar-group">
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
+                        <img alt="Image placeholder" src="../static/img/theme/team-1.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
+                        <img alt="Image placeholder" src="../static/img/theme/team-2.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
+                        <img alt="Image placeholder" src="../static/img/theme/team-3.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
+                        <img alt="Image placeholder" src="../static/img/theme/team-4.jpg">
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">90%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-info" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-right">
+                    <div class="dropdown">
+                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src="../static/img/theme/vue.jpg">
+                      </a>
+                      <div class="media-body">
+                        <span class="name mb-0 text-sm">Vue Paper UI Kit PRO</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td class="budget">
+                    $2200 USD
+                  </td>
+                  <td>
+                    <span class="badge badge-dot mr-4">
+                      <i class="bg-success"></i>
+                      <span class="status">completed</span>
+                    </span>
+                  </td>
+                  <td>
+                    <div class="avatar-group">
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
+                        <img alt="Image placeholder" src="../static/img/theme/team-1.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
+                        <img alt="Image placeholder" src="../static/img/theme/team-2.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
+                        <img alt="Image placeholder" src="../static/img/theme/team-3.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
+                        <img alt="Image placeholder" src="../static/img/theme/team-4.jpg">
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">100%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-right">
+                    <div class="dropdown">
+                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr> -->
+              </tbody>
+            </table>
+          </div>
+          <!-- Card footer -->
+          <div class="card-footer py-4">
+            <!-- <nav aria-label="...">
+              <ul class="pagination justify-content-end mb-0">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1">
+                    <i class="fas fa-angle-left"></i>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+                <li class="page-item active">
+                  <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                  <a class="page-link" href="#">
+                    <i class="fas fa-angle-right"></i>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+              </ul>
+            </nav> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Dark table -->
+    <!-- <div class="row">
+      <div class="col">
+        <div class="card bg-default shadow">
+          <div class="card-header bg-transparent border-0">
+            <h3 class="text-white mb-0">Dark table</h3>
+          </div>
+          <div class="table-responsive">
+            <table class="table align-items-center table-dark table-flush">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col" class="sort" data-sort="name">Project</th>
+                  <th scope="col" class="sort" data-sort="budget">Budget</th>
+                  <th scope="col" class="sort" data-sort="status">Status</th>
+                  <th scope="col">Users</th>
+                  <th scope="col" class="sort" data-sort="completion">Completion</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody class="list">
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src="../static/img/theme/bootstrap.jpg">
+                      </a>
+                      <div class="media-body">
+                        <span class="name mb-0 text-sm">Argon Design System</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td class="budget">
+                    $2500 USD
+                  </td>
+                  <td>
+                    <span class="badge badge-dot mr-4">
+                      <i class="bg-warning"></i>
+                      <span class="status">pending</span>
+                    </span>
+                  </td>
+                  <td>
+                    <div class="avatar-group">
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
+                        <img alt="Image placeholder" src="../static/img/theme/team-1.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
+                        <img alt="Image placeholder" src="../static/img/theme/team-2.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
+                        <img alt="Image placeholder" src="../static/img/theme/team-3.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
+                        <img alt="Image placeholder" src="../static/img/theme/team-4.jpg">
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">60%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-right">
+                    <div class="dropdown">
+                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src="../static/img/theme/angular.jpg">
+                      </a>
+                      <div class="media-body">
+                        <span class="name mb-0 text-sm">Angular Now UI Kit PRO</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td class="budget">
+                    $1800 USD
+                  </td>
+                  <td>
+                    <span class="badge badge-dot mr-4">
+                      <i class="bg-success"></i>
+                      <span class="status">completed</span>
+                    </span>
+                  </td>
+                  <td>
+                    <div class="avatar-group">
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
+                        <img alt="Image placeholder" src="../static/img/theme/team-1.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
+                        <img alt="Image placeholder" src="../static/img/theme/team-2.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
+                        <img alt="Image placeholder" src="../static/img/theme/team-3.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
+                        <img alt="Image placeholder" src="../static/img/theme/team-4.jpg">
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">100%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-right">
+                    <div class="dropdown">
+                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src="../static/img/theme/sketch.jpg">
+                      </a>
+                      <div class="media-body">
+                        <span class="name mb-0 text-sm">Black Dashboard</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td class="budget">
+                    $3150 USD
+                  </td>
+                  <td>
+                    <span class="badge badge-dot mr-4">
+                      <i class="bg-danger"></i>
+                      <span class="status">delayed</span>
+                    </span>
+                  </td>
+                  <td>
+                    <div class="avatar-group">
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
+                        <img alt="Image placeholder" src="../static/img/theme/team-1.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
+                        <img alt="Image placeholder" src="../static/img/theme/team-2.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
+                        <img alt="Image placeholder" src="../static/img/theme/team-3.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
+                        <img alt="Image placeholder" src="../static/img/theme/team-4.jpg">
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">72%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100" style="width: 72%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-right">
+                    <div class="dropdown">
+                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src="../static/img/theme/react.jpg">
+                      </a>
+                      <div class="media-body">
+                        <span class="name mb-0 text-sm">React Material Dashboard</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td class="budget">
+                    $4400 USD
+                  </td>
+                  <td>
+                    <span class="badge badge-dot mr-4">
+                      <i class="bg-info"></i>
+                      <span class="status">on schedule</span>
+                    </span>
+                  </td>
+                  <td>
+                    <div class="avatar-group">
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
+                        <img alt="Image placeholder" src="../static/img/theme/team-1.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
+                        <img alt="Image placeholder" src="../static/img/theme/team-2.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
+                        <img alt="Image placeholder" src="../static/img/theme/team-3.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
+                        <img alt="Image placeholder" src="../static/img/theme/team-4.jpg">
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">90%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-info" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-right">
+                    <div class="dropdown">
+                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                      <a href="#" class="avatar rounded-circle mr-3">
+                        <img alt="Image placeholder" src="../static/img/theme/vue.jpg">
+                      </a>
+                      <div class="media-body">
+                        <span class="name mb-0 text-sm">Vue Paper UI Kit PRO</span>
+                      </div>
+                    </div>
+                  </th>
+                  <td class="budget">
+                    $2200 USD
+                  </td>
+                  <td>
+                    <span class="badge badge-dot mr-4">
+                      <i class="bg-success"></i>
+                      <span class="status">completed</span>
+                    </span>
+                  </td>
+                  <td>
+                    <div class="avatar-group">
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
+                        <img alt="Image placeholder" src="../static/img/theme/team-1.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
+                        <img alt="Image placeholder" src="../static/img/theme/team-2.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
+                        <img alt="Image placeholder" src="../static/img/theme/team-3.jpg">
+                      </a>
+                      <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
+                        <img alt="Image placeholder" src="../static/img/theme/team-4.jpg">
+                      </a>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">100%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="text-right">
+                    <div class="dropdown">
+                      <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+{% endblock %}
+
+{% block scripts %}
+<script src="../../static/vendor/jquery/dist/jquery.min.js"></script>
+<script src="{{url_for('static', filename='js/project_filter.js')}}"></script>
+
+<script>
+
+
+//   let itemNames = document.querySelectorAll('#projects')
+//   Array.from(itemNames).forEach(name => {
+
+//     console.log(name.innerHTML)
+
+// });
+
+// console.log($(window).width())
+
+if ($(window).width() > 600) {
+    console.log('fds')
+    $('.wrapper').unwrap()
+}
+
+var t
+window.onresize = () => {
+    if (typeof t == 'undefined') resStarted() //2
+    clearTimeout(t); t = setTimeout(() => { t = undefined; resEnded() }, 500) //3
+}
+
+function resStarted() { 
+    var a; 
+}
+function resEnded() { 
+// 
+
+// if ($(window).width() < 600) {
+//     console.log('< 600')
+//     $('.wrapper').wrap('<div id="wrapper1"></div>')
+//     $('.wrapper').wrap('<div id="wrapper2"></div>')
+//     $('.wrapper').wrap('<div id="wrapper3"></div>')
+// }
+    console.log('Resize Ended') 
+}
+
+
+
+
+
+// console.log('itemNames:', itemNames)
+
+// let searchBar = document.querySelector('#search-item')
+// searchBar.addEventListener('keyup', event =>{
+//     Array.from(itemNames).forEach(name => {
+//         let itemContent = name.parentElement.parentElement.parentElement
+//         if (name.innerText.toLowerCase().indexOf(searchBar.value.toLowerCase()) == -1) {
+//             itemContent.style.display = 'none';
+//         }
+//         else {
+//             itemContent.style.display = 'block';
+//         }
+//     });
+// });
+
+</script>
+{% endblock %}

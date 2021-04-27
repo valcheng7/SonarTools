@@ -1,0 +1,48 @@
+<style>
+div {
+  white-space: pre;
+  font-family: monospace;
+  display: block;
+}
+</style>
+<div class="str">
+{{text}}
+</div>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+   $('div').html(function(i, old) {
+  return '<span class="code">' + old.split('\n').join('</span>\n<span class="code">') + '</span>';
+})
+
+const arr = [
+    {'src': 'eshoponweb:src/ApplicationCore/Constants/AuthorizationConstants.cs', 'severity': 'INFO', 'key': 'AXc9pg-RWnoiXpYuABlH', 
+    'startLine': 7, 'endLine': 7, 'status': 'OPEN', 'message': "Complete the task associated to this 'TODO' comment.", 'effort': '0', 'type': 'CODE_SMELL'}, 
+    {'src': 'eshoponweb:src/ApplicationCore/Constants/AuthorizationConstants.cs', 'severity': 'INFO', 'key': 'AXc9pg-RWnoiXpYuABlI', 
+    'startLine': 10, 'endLine': 10, 'status': 'OPEN', 'message': "Complete the task associated to this 'TODO' comment.", 'effort': '0', 'type': 'CODE_SMELL'}, 
+    {'src': 'eshoponweb:src/ApplicationCore/Constants/AuthorizationConstants.cs', 'severity': 'MAJOR', 'key': 'AXc9pg-RWnoiXpYuABlJ', 
+    'startLine': 3, 'endLine': 3, 'status': 'OPEN', 'message': "Add a 'protected' constructor or the 'static' keyword to the class declaration.", 'effort': '10min', 'type': 'CODE_SMELL'}]
+
+let codes = document.getElementsByClassName('code')
+
+    arr.forEach(element => {
+    let num = element["startLine"]
+    let index = 0;
+    let add = true
+        Array.from(codes).forEach(element2 => {
+        if(index === num){
+            if(add == true){
+            element2.insertAdjacentHTML("afterend",`<div>${element["message"]}</div>`)
+            add = false
+            }
+        }
+        else{
+            index += 1
+        }
+    })
+})
+
+</script>

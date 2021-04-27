@@ -1,0 +1,180 @@
+<!--
+=========================================================
+* Argon Dashboard - v1.2.0
+=========================================================
+* Product Page: https://www.creative-tim.com/product/argon-dashboard
+
+* Copyright  Creative Tim (http://www.creative-tim.com)
+* Coded by www.creative-tim.com
+=========================================================
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+
+
+<!-- Layout for Login/Register pages -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
+  <meta name="author" content="Creative Tim">
+  <title>{% block title %}{% endblock %}</title>
+  <!-- Favicon -->
+  <link rel="icon" href="../../static/img/brand/cyros_logo.png" type="image/png">
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+  <!-- Icons -->
+  <link rel="stylesheet" href="../../static/vendor/nucleo/css/nucleo.css" type="text/css">
+  <link rel="stylesheet" href="../../static/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+        crossorigin="anonymous"/>
+  
+  <!-- Argon CSS -->
+  <link rel="stylesheet" href="../../static/css/argon.css?v=1.2.0" type="text/css">
+  <link rel="stylesheet" href="../../static/css/error.css" type="text/css">
+
+{% block head %}
+{% endblock %}
+
+
+{% block extra_css %}  
+{% endblock %}
+
+  
+</head>
+
+<body translate="">
+
+
+  <!-- Navbar -->
+  <nav id="navbar-main" class="navbar navbar-horizontal navbar-transparent navbar-main navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand" href="dashboard.html">
+        <img src="../../static/img/brand/cyros_white.png">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse navbar-custom-collapse collapse" id="navbar-collapse">
+        <div class="navbar-collapse-header">
+          <div class="row">
+            <div class="col-6 collapse-brand">
+              <a href="dashboard.html">
+                <img src="../../static/img/brand/blue.png">
+              </a>
+            </div>
+            <div class="col-6 collapse-close">
+              <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a href="/" class="nav-link">
+              <span class="nav-link-inner--text">Home</span>
+            </a>
+          </li>
+          {% if session['user_id'] %}
+          <li class="nav-item">
+            <a href="/dashboard" class="nav-link">
+              <span class="nav-link-inner--text">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/account" class="nav-link">
+              <span class="nav-link-inner--text">Profile</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/project_loading" class="nav-link">
+              <span class="nav-link-inner--text">Projects</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/logout" class="nav-link">
+              <span class="nav-link-inner--text">Logout</span>
+            </a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a href="/login" class="nav-link">
+              <span class="nav-link-inner--text">Login</span>
+            </a>
+          </li>
+          {% endif %}
+          <!-- <li class="nav-item">
+            <a href="/register" class="nav-link">
+              <span class="nav-link-inner--text">Register</span>
+            </a>
+          </li> -->
+        </ul>
+        <hr class="d-lg-none" />
+        <ul class="navbar-nav align-items-lg-center ml-lg-auto">
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="https://www.sonarqube.org/downloads/" target="_blank" data-toggle="tooltip" data-original-title="Download SonarQube">
+              <i class="fas fa-globe-americas"></i>
+              <span class="nav-link-inner--text d-lg-none">Website</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="https://m.facebook.com/profile.php?id=141050985907117" target="_blank" data-toggle="tooltip" data-original-title="Like us on Facebook">
+              <i class="fab fa-facebook-square"></i>
+              <span class="nav-link-inner--text d-lg-none">Facebook</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="https://twitter.com/sonarqube" target="_blank" data-toggle="tooltip" data-original-title="Follow us on Twitter">
+              <i class="fab fa-twitter-square"></i>
+              <span class="nav-link-inner--text d-lg-none">Twitter</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-icon" href="https://github.com/SonarSource/sonarqube" target="_blank" data-toggle="tooltip" data-original-title="Star us on Github">
+              <i class="fab fa-github"></i>
+              <span class="nav-link-inner--text d-lg-none">Github</span>
+            </a>
+          </li>
+          <!-- <li class="nav-item d-none d-lg-block ml-lg-4">
+            <a href="#" target="_blank" class="btn btn-neutral btn-icon">
+              <span class="btn-inner--icon">
+                <i class="fas fa-shopping-cart mr-2"></i>
+              </span>
+              <span class="nav-link-inner--text">Upgrade to PRO</span>
+            </a>
+          </li> -->
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+{% block content %}
+{% endblock %}
+    
+  <!-- Footer -->
+ 
+
+{% block scripts %}
+{% endblock %}
+  <!-- Argon Scripts -->
+  <!-- Core -->
+  <script src="../../static/vendor/jquery/dist/jquery.min.js"></script>
+  <script src="../../static/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../../static/vendor/js-cookie/js.cookie.js"></script>
+  <script src="../../static/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+  <script src="../../static/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+  <!-- Argon JS -->
+  <script src="../../static/js/argon.js?v=1.2.0"></script>
+  <script src="../../static/js/error.js"></script>
+
+</body>
+
+</html>

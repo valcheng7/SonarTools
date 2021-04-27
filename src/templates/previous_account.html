@@ -1,0 +1,496 @@
+{% extends "includes/layout(account).html" %}
+{% block title %}
+Cyros - Issues
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .inline { 
+  display: inline-block; 
+  margin:10px;
+  }
+
+  /* Forms */
+
+  
+
+#msform {
+width: 500px;
+margin: 10% auto;
+text-align: center;
+  position: relative;
+}
+#msform fieldset {
+background: #171726;
+  border: 1px solid grey;
+border-radius: 3px;
+box-shadow: 0 0 15px 1px rgba(221, 215, 215, 0.4);
+padding: 20px 30px;
+box-sizing: border-box;
+width: 80%;
+margin: 0 10%;
+
+/*stacking fieldsets above each other*/
+position: relative;
+}
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+display: none;
+}
+/*inputs*/
+#msform textarea {
+padding: 15px;
+border: 1px solid #ccc;
+border-radius: 3px;
+margin-bottom: 10px;
+width: 100%;
+box-sizing: border-box;
+color: #2C3E50;
+  font-size: 13px;
+  background-color: black;
+}
+
+/*buttons*/
+#msform .action-button {
+  width: 100px;
+background: #0E4D40;
+font-weight: bolder;
+color: white;
+border: 0 none;
+border-radius: 6px;
+cursor: pointer;
+padding: 10px 5px;
+  margin: 10px 5px;
+  letter-spacing: 2px;
+  font-size: 17px;
+}
+#msform .action-button:hover, #msform .action-button:focus {
+box-shadow: 0 0 0 2px white, 0 0 0 3px #22a7f0;
+}
+/*headings*/
+.fs-title {
+font-size: 20px;
+text-transform: uppercase;
+color:#8898aa;
+margin-bottom: 10px;
+}
+.fs-subtitle {
+font-weight: normal;
+font-size: 13px;
+color: white;
+margin-bottom: 20px;
+}
+
+
+.jq-meter {
+margin: 10px 0px;
+border: 1px solid transparent;
+box-shadow: inset 0 1px 3px rgba(0,0,0,.075);
+background-color: #fCfCfC;
+border-radius: 4px;
+position: relative;
+}
+
+.jq-meter .bar {
+width: 0;
+height: 22px;
+background-color: #f9f9f9;
+transition: all ease .5s;
+border-radius: 4px;
+}
+
+.jq-meter .bar + span {
+display: none;  
+position: absolute;
+width: 100%;
+text-align: center;
+color: #fff;
+top: 50%;
+left: 0%;
+transform: translate(0%, -50%);
+transition: all ease .5s;
+}
+
+.jq-meter.strong .bar + span {
+display: block;
+width: 100%;
+transition: all ease .5s;
+}
+
+.jq-meter.medium .bar + span {
+display: block;
+width: 66%;
+transition: all ease .5s;
+}
+
+.jq-meter.weak .bar + span {
+display: block;
+width: 33%;
+transition: all ease .5s;
+}
+
+.jq-meter.weak .bar {
+width: 33%;
+background-color: #c9302c;
+transition: all ease .5s;
+border-radius: 4px;
+}
+
+.jq-meter.medium .bar {
+width: 66%;
+background-color: #ec971f;
+transition: all ease .5s;
+border-radius: 4px;
+}
+
+.jq-meter.strong .bar {
+width: 100%;
+background-color: #398439;
+transition: all ease .5s;
+border-radius: 4px;
+}
+
+.rounded {
+  color: white;
+  border-radius: 10px;
+  background: #ff3333;
+  padding: 20px; 
+  text-align: left;
+  font-size: 14px;
+  /* width: 200px;
+  height: 150px;   */
+}
+
+.invalid-feedback {
+color:red;
+text-align: left;
+}
+
+.box {
+background: #171726;
+  border: 1px solid grey;
+border-radius: 3px;
+box-shadow: 0 0 15px 1px rgba(221, 215, 215, 0.4);
+padding: 20px 30px;
+box-sizing: border-box;
+width: 30%;
+margin: auto;
+
+
+/*stacking fieldsets above each other*/
+position: relative;
+}
+.title{
+font-size: 20px;
+text-transform: uppercase;
+color:white;
+margin-bottom: 10px;
+text-align: center;
+font-family: "Poppins" sans-serif;
+}
+
+.btnRegister {
+background-color: #0E4D40;
+color: white;
+padding: 12px;
+margin: 10px 0;
+border: none;
+width: 100%;
+border-radius: 3px;
+cursor: pointer;
+font-size: 17px;
+font-family: "Poppins" sans-serif;
+font-weight:bold;
+letter-spacing: 2px;
+}
+
+.sub{
+color: #797979;
+text-align: center;
+}
+
+.small {
+color: #797979;
+}
+
+.link {
+color: #22a7f0;
+}
+
+.align {
+margin: 15% auto;
+}
+
+.navbar-brand {
+color: white;
+font-family: "Poppins", sans-serif;
+font-size: 35px;
+padding-left: 10%;
+}
+
+.label .text {
+text-align: left!important;
+color: white;
+font-family: "Poppins" sans-serif!important;
+margin-bottom: 10px;
+display: block;
+}
+
+.show_input {
+width: 100%;
+margin-bottom: 20px;
+padding: 12px;
+border-bottom: 1px solid #2643e9;
+border-radius: 3px;
+background: none;
+border-top:none;
+border-left:none;
+border-right:none;
+color: #8898aa;
+outline:none!important;
+font-family: "Poppins", sans-serif!important;
+}
+
+.show_input:focus{
+border-bottom: 1px solid #2643e9;
+outline: none;
+-webkit-appearance: none;
+}
+
+.show_input:-webkit-autofill, .show_input:-webkit-autofill:hover, .show_input:-webkit-autofill:focus, input:-webkit-autofill:active {
+transition: background-color 5000s ease-in-out 0s;
+-webkit-text-fill-color: #2643e9 !important;
+}
+
+button:focus, .show_input:focus {
+outline: 0;
+}
+
+/* .is-invalid{
+background-color: black!important;
+color: #8898aa!important;
+} */
+
+  
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+  <div class="container-fluid">
+      <div class="header-body">
+      <div class="row align-items-center py-4">
+         
+          <div class="col-lg-6 col-5 text-right">
+         
+          </div>
+      </div>
+      </div>
+  </div>
+
+<!-- Page content -->
+
+
+
+
+<div class="container-fluid mt--6" >
+
+  <br>
+
+  <div class="nav-wrapper">
+    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab" href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true"><i class="fas fa-user-circle"></i>&nbsp;&nbsp;Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab" href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false"><i class="fas fa-key"></i>&nbsp;&nbsp;Change Password</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab" href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false"><i class="fas fa-ticket-alt"></i>&nbsp;&nbsp;Generate Token</a>
+        </li>
+    </ul>
+</div>
+<div class="card shadow"  style='background-color: #f8f9fe; box-shadow:none !important; '>
+    <div class="card-body" >
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel" aria-labelledby="tabs-icons-text-1-tab" >
+                <!-- <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+                <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse.</p> -->
+            
+                <!-- Profile Card -->
+                <div class="row">
+                  <div class="col-xl-8 order-xl-1 center">
+                    <div class="card">
+                      <div class="card-header">
+                        <div class="row align-items-center">
+                          <div class="col-8">
+                            <a href="#">
+                              <img src="../static/img/theme/team-4.jpg" class="rounded-circle inline" style='width: 8% !important; padding: 0; margin: 0'>
+                            </a>
+                            <h3 class="mb-0 inline">My profile </h3>
+                          </div>
+                          <div class="col-4 text-right">
+                            <a href="#!" class="btn btn-sm btn-primary">Settings</a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <form>                        
+                          <h6 class="heading-small text-muted mb-4">User information</h6>
+                          <div class="pl-lg-4">
+                            <div class="row">
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label class="form-control-label" for="username">Username</label>
+                                 
+                                  <input type="text" id="username" class="form-control show_input" placeholder="Username" value="lucky.jesse">
+                                </div>
+                              </div>
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label class="form-control-label" for="login">Login</label>
+                                  <input type="email" id="input-email" class="form-control show_input" value="Lucky" placeholder="Lucky">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label class="form-control-label" for="email">Email address</label>
+                                  <input type="text" id="input-first-name" class="form-control show_input" placeholder="First name" value="jesse@example.com">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label class="form-control-label" for="username">Groups:</label>
+                                  <br>
+                                  <span class="badge badge-primary">Primary</span>
+                                  <span class="badge badge-primary">Primary</span>
+                                </div>
+                              </div>
+                              <div class="col-lg-6">
+                                <div class="form-group">
+                                  <label class="form-control-label" for="login">SCM Accounts:</label>
+                                  <br>
+                                  <span class="badge badge-primary">Primary</span>
+                                  <span class="badge badge-primary">Primary</span>
+                                  <span class="badge badge-primary">Primary</span>
+                                  
+                                </div>
+                              </div>
+                          </div>
+                              
+                           
+                          </div>
+                          
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End of Profile Card -->
+
+            
+            </div>
+            <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                
+               <!-- Change Password Form -->
+               <div class="row">
+                <div class="col-xl-8 order-xl-1 center">
+                  <div class="card">
+                    <div class="card-header">
+                      <div class="row align-items-center">
+                        <div class="col-8">
+                          <i class="fas fa-key" style='color: #5e72e4;'></i>
+                          <h3 class="mb-0 inline">Change Password </h3>
+                        </div>
+                        <div class="col-4 text-right">
+                          <a href="#!" class="btn btn-sm btn-primary">Settings</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <form>                        
+                        <h6 class="heading-small text-muted mb-4">User information</h6>
+                        <div class="pl-lg-4">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="form-group">
+                                <label class="form-control-label" for="old_password">Old Password</label>
+                                <input type="text" id="old_password" class="form-control" placeholder="First name" value="jesse@example.com">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="form-group mb-3">
+                                <div class="input-group input-group-merge input-group-alternative">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                  </div>    
+                                  <input type="text" id="new_password" class="form-control" placeholder="First name" value="jesse@example.com">
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="form-group mb-3">
+                                <div class="input-group input-group-merge input-group-alternative">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                  </div>    
+                                  <input type="text" id="new_password" class="form-control" placeholder="First name" value="jesse@example.com">
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>  
+                          <button type="button" class="btn btn-outline-primary" style='float:right;'>Change Password</button>             
+                        </div>
+                        
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End of Change Password Form -->
+
+            </div>
+            <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel" aria-labelledby="tabs-icons-text-3-tab">
+                <p class="description">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+
+
+
+

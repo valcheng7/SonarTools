@@ -1,0 +1,1049 @@
+{% extends "includes/layout(issues).html" %}
+{% block title %}
+Sonar Tools - Issues
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* .media{
+     width: 700px;
+     white-space: normal
+  } */
+  .inline { 
+     display: inline-block; 
+     margin:10px;
+     }
+
+
+   /* Create two equal columns that floats next to each other */
+ .column {
+   float: left;
+   width: 50%;
+   padding: 10px;
+   /* height: 300px; */
+ }
+ /* Clear floats after the columns */
+ .row:after {
+   content: "";
+   display: table;
+   clear: both;
+ }
+
+ .overlay{
+    background-color: white;
+    position:fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:100%;
+    height:100%;
+    top:0px;
+    left:0px;
+    z-index:2000;
+}
+
+
+.boxes {
+    height: 32px;
+    width: 32px;
+    position: relative;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    margin-top: 32px;
+    -webkit-transform: rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0px);
+    transform: rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0px);
+}
+.boxes .box {
+    width: 32px;
+    height: 32px;
+    top: 0px;
+    left: 0;
+    position: absolute;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+
+
+
+.boxes .box:nth-child(1) {
+    -webkit-transform: translate(100%, 0);
+    transform: translate(100%, 0);
+    -webkit-animation: box1 1s linear infinite;
+    animation: box1 1s linear infinite;
+}
+.boxes .box:nth-child(2) {
+    -webkit-transform: translate(0, 100%);
+    transform: translate(0, 100%);
+    -webkit-animation: box2 1s linear infinite;
+    animation: box2 1s linear infinite;
+}
+.boxes .box:nth-child(3) {
+    -webkit-transform: translate(100%, 100%);
+    transform: translate(100%, 100%);
+    -webkit-animation: box3 1s linear infinite;
+    animation: box3 1s linear infinite;
+}
+.boxes .box:nth-child(4) {
+    -webkit-transform: translate(200%, 0);
+    transform: translate(200%, 0);
+    -webkit-animation: box4 1s linear infinite;
+    animation: box4 1s linear infinite;
+}
+
+
+
+.boxes .box > div {
+    background: #5C8DF6;
+    --translateZ: 15.5px;
+    --rotateY: 0deg;
+    --rotateX: 0deg;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #5C8DF6;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    -webkit-transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ));
+    transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ));
+}
+
+.boxes .box > div:nth-child(1) {
+    top: 0;
+    left: 0;
+    background: #5C8DF6;
+}
+.boxes .box > div:nth-child(2) {
+    background: #145af2;
+    right: 0;
+    --rotateY: 90deg;
+}
+.boxes .box > div:nth-child(3) {
+    background: #447cf5;
+    --rotateX: -90deg;
+}
+.boxes .box > div:nth-child(4) {
+    background: #DBE3F4;
+    top: 0;
+    left: 0;
+    --translateZ: -90px;
+}
+
+
+
+
+
+@keyframes box1 {
+    0%,
+    50% {
+        transform: translate(100%, 0);
+    }
+    100% {
+        transform: translate(200%, 0);
+    }
+}
+
+@keyframes box2 {
+    0%{
+        transform: translate(0, 100%);
+    }
+    50% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(100%, 0);
+    }
+}
+
+@keyframes box3 {
+    0%,
+    50% {
+        transform: translate(100%, 100%);
+    }
+    100% {
+        transform: translate(0, 100%);
+    }
+}
+
+@keyframes box4 {
+    0%{
+        transform: translate(200%, 0);
+    }
+    50% {
+        transform: translate(200%, 100%);
+    }
+    100% {
+        transform: translate(100%, 100%);
+    }
+}
+ </style>
+
+{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+{% if data.keys()|length > 50 %}
+<div class="overlay">
+<div style="position: absolute;top:100px">
+  Rendering data... 
+</div>
+
+<div class="boxes">
+  <div class="box">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+  </div>
+  <div class="box">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+  </div>
+  <div class="box">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+  </div>
+  <div class="box">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+  </div>
+</div>
+</div>
+{% endif %}
+
+<!-- Header -->
+<!-- Header -->
+<div class="header pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <!-- <h6 class="h2 text-black d-inline-block mb-0">Issues</h6> -->
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
+                <li class="breadcrumb-item"><a href="/projects">Projects</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Issues</li>
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+           <!-- Button trigger modal -->
+           <button type="button" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#exampleModal">
+            Filters
+        </button>
+        <span id="params" style="display: none;">{{params}}</span>
+        <!-- Modal -->
+        <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Filters</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div style='text-align: left;' class="modal-body">
+
+                  <div class='row'>
+                    <div class='column'>
+                    <span style="color: #5e72e4;">
+                      <i class="fas fa-cubes"></i>
+                    </span>
+                    
+                    <span class="name mb-0 text-sm">Type</span>
+                    <br>
+
+                    <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input type" id="bug" type="checkbox">
+                        <label class="custom-control-label" for="bug">
+                          <span class="text-muted">Bug</span>
+                        </label>
+
+                    </div>
+
+                    <div class="custom-control custom-control-alternative custom-checkbox inline">
+                    <input class="custom-control-input type" id="vulnerability" type="checkbox">
+                        <label class="custom-control-label" for="vulnerability">
+                          <span class="text-muted">Vulnerability</span>
+                        </label>
+                    </div>
+
+                    <div class="custom-control custom-control-alternative custom-checkbox inline">
+                      <input class="custom-control-input type" id="code_smell" type="checkbox">
+                          <label class="custom-control-label" for="code_smell">
+                            <span class="text-muted">Code Smell</span>
+                          </label>
+                      </div>
+                  </div>
+
+                    <!-- <br>
+                    <br> -->
+                  <div class='column'>
+
+                    <span style="color: #5e72e4;">
+                        <i class="fas fa-bug"></i>
+                    </span>
+                    
+                    <span class="name mb-0 text-sm"> Severity</span>
+                    <br>
+                    
+                    <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input severity" id="info" type="checkbox">
+                        <label class="custom-control-label" for="info">
+                          <span class="text-muted">Info</span>
+                        </label>
+
+                    </div>
+
+                    <div class="custom-control custom-control-alternative custom-checkbox inline">
+                    <input class="custom-control-input severity" id="minor" type="checkbox">
+                        <label class="custom-control-label" for="minor">
+                          <span class="text-muted">Minor</span>
+                        </label>
+                    </div>
+
+                    <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input severity" id="blocker" type="checkbox">
+                        <label class="custom-control-label" for="blocker">
+                          <span class="text-muted">Blocker</span>
+                        </label>
+
+                    </div>
+
+                    <div class="custom-control custom-control-alternative custom-checkbox inline">
+                    <input class="custom-control-input severity" id="critical" type="checkbox">
+                        <label class="custom-control-label" for="critical">
+                          <span class="text-muted">Critical</span>
+                        </label>
+                    </div>
+
+                    <div class="custom-control custom-control-alternative custom-checkbox inline">
+                        <input class="custom-control-input severity" id="major" type="checkbox">
+                        <label class="custom-control-label" for="major">
+                          <span class="text-muted">Major</span>
+                        </label>
+                    </div>
+                  </div>
+
+                    <!-- <br>
+                    <br> -->
+                    <div class='column'>
+
+                      <span style="color: #5e72e4;">
+                        <i class="fas fa-tools"></i>
+                      </span>
+                      
+                      <span class="name mb-0 text-sm"> Resolution</span>
+                      <br>
+                      
+                      <div class="custom-control custom-control-alternative custom-checkbox inline">
+                          <input class="custom-control-input" id="unresolved" type="checkbox">
+                          <label class="custom-control-label" for="unresolved">
+                            <span class="text-muted">Unresolved</span>
+                          </label>
+  
+                      </div>
+  
+                      <div class="custom-control custom-control-alternative custom-checkbox inline">
+                      <input class="custom-control-input" id="fixed" type="checkbox">
+                          <label class="custom-control-label" for="fixed">
+                            <span class="text-muted">Fixed</span>
+                          </label>
+                      </div>     
+                    </div>
+
+                   
+                    
+                    <div class='column'>
+
+                      <span style="color: #5e72e4;">
+                        <i class="fas fa-code"></i>
+                      </span>
+                      
+                      <span class="name mb-0 text-sm"> Language</span>
+                      <br>
+                      
+                      {% for i in languages %}
+                        <div class="custom-control custom-control-alternative custom-checkbox inline">
+                            <input class="custom-control-input languages" id="languages_{{i}}" type="checkbox">
+                            <label class="custom-control-label" for="languages_{{i}}">
+                            {% if i == "cs" %}
+                            <span class="text-muted">C#</span>
+                            {% elif i =="css"  %}
+                            <span class="text-muted">CSS</span>
+                            {% elif i =="js"  %}
+                            <span class="text-muted">JavaScript</span>
+                            {% elif i =="web"%}
+                            <span class="text-muted">HTML</span>
+                            {% elif i =="ruby"  %}
+                            <span class="text-muted">Ruby</span>
+                            {% elif i =="vbnet"  %}
+                            <span class="text-muted">VB.NET</span>
+                            {% elif i =="xml"  %}
+                            <span class="text-muted">XML</span>
+                            {% else %}
+                            <span class="text-muted">{{i}}</span>
+                            {%endif%}
+                            </label>
+                        </div>
+                        {% endfor %}  
+                    </div>
+
+                     <div class='column'>
+
+                      <span style="color: #5e72e4;">
+                        <i class="far fa-calendar-alt"></i>
+                      </span>
+                      
+                      <span class="name mb-0 text-sm"> Creation Date</span>
+                      
+                      
+                      <div style='padding-top: 10px;' class="input-daterange datepicker row align-items-center">
+                        <div class="col">
+                            <div class="form-group">
+                              <label style='font-size: small;' for='startDate'>From: </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>      
+                                    <input id='startDate' class="form-control" placeholder="Start date" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                              <label style='font-size: small;' for='endDate'>End: </label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input id='endDate' class="form-control" placeholder="End date" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    </div>
+
+                  </div>
+                      
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="reset">Reset all filters</button> 
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="filter-button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                </div>
+            </div>
+            </div>
+        </div>
+            <a href="{{url_for('download_CSVfile2')}}" class="btn btn-sm btn-neutral">Download CSV</a>
+            <a href="{{url_for('download_PDFfile2')}}" class="btn btn-sm btn-neutral">Download PDF</a>
+            <!-- <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+    </div>
+</div>
+
+<div class="main-content" id="panel">
+<div class="container-fluid ">
+     
+          <!-- <div class="table-responsive">
+              
+            <table class="table align-items-center table-flush">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col" class="sort" data-sort="name" colspan="10000">src/PublicApi/BaseResponse.cs</th>
+              
+                  
+                </tr>
+                
+              </thead>
+              <tbody class="list">
+                <tr>
+                  <th scope="row">
+                    <div class="media align-items-center">
+                    
+                      <div class="media-body">
+                        <span class="name mb-0 text-sm"> 
+                            Add a nested comment explaining why this method is empty, throw a 'NotSupportedException' or complete the implementation.
+                        </span>
+                      </div>
+                    </div>
+                  </th>
+                  <td>
+                    <span class="badge badge-dot mr-4">
+                      <i class="bg-warning"></i>
+                      <span class="status">pending</span>
+                    </span>
+                  </td>
+                  <td class="bugs ">
+                      <img alt="Image placeholder" src="../static/img/letters/a.png" width='25rem'>
+                    &nbsp; 0
+                  </td>
+                  
+                  <td>
+                    <img alt="Image placeholder" src="../static/img/letters/b.png" width='25rem'>
+                    &nbsp; 0
+                
+                  </td>
+                  <td>
+                    <img alt="Image placeholder" src="../static/img/letters/c.png" width='25rem'>
+                    &nbsp; 0
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">3.6%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <img alt="Image placeholder" src="../static/img/letters/d.png" width='25rem'>
+                    &nbsp; 500
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">0%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td colspan="10">
+                    <div class="d-flex align-items-center">
+                      <span class="completion mr-2">2.9%</span>
+                      <div>
+                        <div class="progress">
+                          <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                
+                </tr> 
+
+                <span>i</span>
+                
+                
+                    
+                
+                
+                
+                
+                
+
+                <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                       
+                        <div class="media-body">
+                          <span class="name mb-0 text-sm">Argon Design System Argon Design System Argon Design System Argon Design System Argon Design System</span>
+                        </div>
+                      </div>
+                    </th>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-warning"></i>
+                        <span class="status">pending</span>
+                      </span>
+                    </td>
+                    <td class="bugs ">
+                        <img alt="Image placeholder" src="../static/img/letters/a.png" width='25rem'>
+                      &nbsp; Remove this commented out code.
+                    </td>
+                    
+                    <td>
+                      <img alt="Image placeholder" src="../static/img/letters/b.png" width='25rem'>
+                      &nbsp; 0
+                  
+                    </td>
+                    <td>
+                      <img alt="Image placeholder" src="../static/img/letters/c.png" width='25rem'>
+                      &nbsp; 0
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <span class="completion mr-2">3.6%</span>
+                        <div>
+                          <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <img alt="Image placeholder" src="../static/img/letters/d.png" width='25rem'>
+                      &nbsp; 500
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <span class="completion mr-2">0%</span>
+                        <div>
+                          <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <span class="completion mr-2">2.9%</span>
+                        <div>
+                          <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  
+
+                    
+                  </tr> 
+                  
+                
+              </tbody>
+            </table>
+
+
+            <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col" class="sort" data-sort="name" colspan="10000">src/PublicApi/BaseResponse.cs</th>
+                
+                    
+                  </tr>
+                  
+                </thead>
+                <tbody class="list">
+                  <tr>
+                    <th scope="row">
+                      <div class="media align-items-center">
+                       
+                        <div class="media-body">
+                          <span class="name mb-0 text-sm"> 
+                              Add a nested comment explaining why this method is empty, throw a 'NotSupportedException' or complete the implementation.
+                          </span>
+                        </div>
+                      </div>
+                    </th>
+                    <td>
+                      <span class="badge badge-dot mr-4">
+                        <i class="bg-warning"></i>
+                        <span class="status">pending</span>
+                      </span>
+                    </td>
+                    <td class="bugs ">
+                        <img alt="Image placeholder" src="../static/img/letters/a.png" width='25rem'>
+                      &nbsp; 0
+                    </td>
+                    
+                    <td>
+                      <img alt="Image placeholder" src="../static/img/letters/b.png" width='25rem'>
+                      &nbsp; 0
+                  
+                    </td>
+                    <td>
+                      <img alt="Image placeholder" src="../static/img/letters/c.png" width='25rem'>
+                      &nbsp; 0
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <span class="completion mr-2">3.6%</span>
+                        <div>
+                          <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <img alt="Image placeholder" src="../static/img/letters/d.png" width='25rem'>
+                      &nbsp; 500
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <span class="completion mr-2">0%</span>
+                        <div>
+                          <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <span class="completion mr-2">2.9%</span>
+                        <div>
+                          <div class="progress">
+                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                   
+  
+                  <tr>
+                      <th scope="row">
+                        <div class="media align-items-center">
+                          
+                          <div class="media-body">
+                            <span class="name mb-0 text-sm">Argon Design System Argon Design System Argon Design System Argon Design System Argon Design System</span>
+                          </div>
+                        </div>
+                      </th>
+                      <td>
+                        <span class="badge badge-dot mr-4">
+                          <i class="bg-warning"></i>
+                          <span class="status">pending</span>
+                        </span>
+                      </td>
+                      <td class="bugs ">
+                          <img alt="Image placeholder" src="../static/img/letters/a.png" width='25rem'>
+                        &nbsp; Remove this commented out code.
+                      </td>
+                      
+                      <td>
+                        <img alt="Image placeholder" src="../static/img/letters/b.png" width='25rem'>
+                        &nbsp; 0
+                    
+                      </td>
+                      <td>
+                        <img alt="Image placeholder" src="../static/img/letters/c.png" width='25rem'>
+                        &nbsp; 0
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <span class="completion mr-2">3.6%</span>
+                          <div>
+                            <div class="progress">
+                              <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <img alt="Image placeholder" src="../static/img/letters/d.png" width='25rem'>
+                        &nbsp; 500
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <span class="completion mr-2">0%</span>
+                          <div>
+                            <div class="progress">
+                              <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <span class="completion mr-2">2.9%</span>
+                          <div>
+                            <div class="progress">
+                              <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                  
+  
+                      
+                    </tr> 
+                    
+                  
+                </tbody>
+              </table>
+          </div> -->
+
+
+
+{% for i in data.keys() %}
+<!-- source code file -->
+<h5 style="color: #8898aa; font-family: Monospace, sans-serif;" id={{i}} class="titles" >{{i}}</h5>
+
+  {% for j in data[i] %}
+  <!-- error messages-->
+            <div class="error {{i}}" style="width: 100%; font-family: Monospace, sans-serif; cursor: pointer;" onclick="window.location=`project_issues_file_loading?file={{i}}&line={{j['key']}}&source={{i}}'`">
+              <div class="card card-stats" style='background-color: #f2dede;'>
+                  <!-- Card body -->
+                  <div class="card-body">
+                      
+              <div class="row">
+                  <div class="col">
+                      <h5 class="card-title text-muted mb-0" style="color: #525f7f !important;">{{j["message"]}}</h5>
+                      <!-- <span class="h2 font-weight-bold mb-0">2,356</span> -->
+                  </div>
+                  {% if j['startLine'] != None %}
+                  <div class="col-auto">
+                    <div style='font-size: small;'>
+                        <i class="far fa-calendar-alt"></i>
+                        {{j["creationDate"]}}
+                        &nbsp;
+                        <i class="fas fa-stream"></i>
+                        L{{j["startLine"]}}
+                    </div>
+                  </div>
+                  {% else %}
+                  <div class="col-auto">
+                    <div style='font-size: small;'>
+                        <i class="far fa-calendar-alt"></i>
+                        {{j["creationDate"]}}
+                    </div>
+                  </div>
+                  {% endif %}
+              </div>
+              <p class="mt-3 mb-0 text-sm" style='color: black; font-size: smaller !important;'>
+                    <!-- Code Smell Type------------------------------------------------------ -->
+                      {% if j["type"] == "CODE_SMELL" %}
+                      <span class=" mr-2">
+                          <span style="color: black;">
+                              <i class="fas fa-radiation-alt"></i>
+                          </span>
+                          Code Smell
+                      </span>
+
+                    <!-- Bug Type------------------------------------------------------ -->
+
+                    {% elif j["type"] == "BUG" %}
+                    <span class=" mr-2">
+                        <span style="color: black;">
+                            <i class="fas fa-bug"></i>
+                        </span>
+                        Bug
+                    </span>
+
+                    <!-- Vulnerability Type------------------------------------------------------ -->
+                    {% else %}
+                    <span class=" mr-2">
+                        <span style="color: black;">
+                            <i class="fas fa-unlock"></i>
+                        </span>
+                        Vulnerability
+                    </span>
+                    {% endif %}
+
+                  <!-- Blocker serverity------------------------------------------------------ -->
+            {% if j["severity"] == "BLOCKER" %}
+            <span class=" mr-2">
+                <span style="color: #FF3333;">
+                    <i class="fas fa-exclamation-circle"></i>
+                </span>
+                Blocker
+            </span>
+            
+            <!-- Critical serverity------------------------------------------------------ -->
+            {% elif j["severity"] == "CRITICAL"%}
+            <span class=" mr-2">
+                <span style="color: #FF3333;">
+                    <i class="fas fa-arrow-circle-up"></i>
+                </span>
+                Critical
+            </span>
+            
+            <!-- Major serverity------------------------------------------------------ -->
+            {% elif j["severity"] == "MAJOR"%}
+            <span class=" mr-2">
+                <span style="color: #FF3333;">
+                    <i class="fas fa-chevron-circle-up"></i>
+                </span>
+                Major
+            </span>
+            
+            <!-- Minor serverity------------------------------------------------------ -->
+            {% elif j["severity"] == "MINOR"%}
+            <span class=" mr-2">
+                <span style="color: #48d1cc;">
+                    <i class="fas fa-arrow-circle-down"></i>
+                </span>
+                Minor
+            </span>
+            
+            <!-- Info serverity------------------------------------------------------ -->
+            {% else %}        
+            <span class=" mr-2">
+                <span style="color: #5e72e4;">
+                    <i class="fas fa-info-circle"></i>
+                </span>
+                  Info
+            </span>
+            {% endif %}
+
+                  <span class=" mr-2">
+                      <span style="color: #5e72e4;">
+                          <i class="fas fa-circle-notch"></i>
+                      </span>
+                      {{j["status"]}}
+                  </span>
+                  <span class=" mr-2">
+                      <span style="color: #48d1cc;">
+                          <i class="fas fa-running"></i>
+                      </span>
+                      {{j["effort"]}} effort
+                  </span>
+
+                  <!-- <span class=" mr-2">
+                      <span style="color: black;">
+                          <i class="far fa-check-circle"></i>
+                      </span>
+                      Resolved
+                  </span> -->
+
+                  <!-- <span class="text-nowrap">Major</span> -->
+              </p>
+                  </div>           
+              </div>  
+              </div>
+  {% endfor %}
+{% endfor %}
+
+{% if data.keys()|length > 50 %}
+<script>
+  setTimeout(function(){
+    document.querySelector('.overlay').style.display = 'none'
+   }, 3000);
+</script>
+{% endif %}
+
+<!-- Code Smell Type------------------------------------------------------ -->
+
+            <!-- <span class=" mr-2">
+                <span style="color: black;">
+                    <i class="fas fa-radiation-alt"></i>
+                </span>
+                 Code Smell
+            </span> -->
+
+<!-- Bug Type------------------------------------------------------ -->
+
+<!-- <span class=" mr-2">
+    <span style="color: black;">
+        <i class="fas fa-bug"></i>
+    </span>
+     Bug
+</span> -->
+
+<!-- Vulnerability Type------------------------------------------------------ -->
+
+<!-- <span class=" mr-2">
+    <span style="color: black;">
+        <i class="fas fa-unlock"></i>
+    </span>
+    Vulnerability
+</span> -->
+
+<!-- Blocker serverity------------------------------------------------------ -->
+
+<!-- <span class=" mr-2">
+    <span style="color: #FF3333;">
+        <i class="fas fa-exclamation-circle"></i>
+    </span>
+    Blocker
+</span> -->
+
+<!-- Critical serverity------------------------------------------------------ -->
+
+<!-- <span class=" mr-2">
+    <span style="color: #FF3333;">
+        <i class="fas fa-arrow-circle-up"></i>
+    </span>
+    Critical
+</span> -->
+
+<!-- Major serverity------------------------------------------------------ -->
+
+<!-- <span class=" mr-2">
+    <span style="color: #FF3333;">
+        <i class="fas fa-chevron-circle-up"></i>
+    </span>
+    Major
+</span> -->
+
+<!-- Minor serverity------------------------------------------------------ -->
+
+<!-- <span class=" mr-2">
+    <span style="color: #48d1cc;">
+        <i class="fas fa-arrow-circle-down"></i>
+    </span>
+    Minor
+</span> -->
+
+<!-- Info serverity------------------------------------------------------ -->
+            <!--
+                <span class=" mr-2">
+                    <span style="color: #5e72e4;">
+                        <i class="fas fa-info-circle"></i>
+                    </span>
+                     Info
+                </span>
+            -->
+
+<!-- Open------------------------------------------------------ -->
+
+            <!-- <span class=" mr-2">
+                <span style="color: #5e72e4;">
+                    <i class="fas fa-circle-notch"></i>
+                </span>
+                 Open
+            </span> -->
+
+<!-- Reopened------------------------------------------------------ -->
+            <!-- <span class=" mr-2">
+                <span style="color: #5e72e4;">
+                    <i class="fas fa-dot-circle"></i>
+                </span>
+                Reopened
+            </span> -->
+
+<!-- Closed------------------------------------------------------ -->
+            <!-- <span class=" mr-2">
+                <span style="color: black;">
+                    <i class="fas fa-circle"></i>
+                </span>
+                Closed
+            </span> -->
+
+<!-- Confirmed------------------------------------------------------ -->
+            <!-- <span class=" mr-2">
+                <span style="color: black;">
+                    <i class="far fa-dot-circle"></i>
+                </span>
+                Confirmed
+            </span> -->
+
+<!-- Resolved------------------------------------------------------ -->
+            <!-- <span class=" mr-2">
+                <span style="color: black;">
+                    <i class="far fa-check-circle"></i>
+                </span>
+                Resolved
+            </span> -->
+{% endblock %}
+
+{% block scripts %}
+<script src="{{url_for('static', filename='js/issues_filter.js')}}"></script>
+{% endblock %}
+
+
+
+
+

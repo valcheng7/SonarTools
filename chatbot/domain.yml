@@ -1,0 +1,152 @@
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+intents:
+- greet
+- goodbye
+- affirm
+- deny
+- mood_great
+- mood_unhappy
+- bot_challenge
+- navigate
+- projectMetrics
+- status
+- bugs
+- vulnerabilities
+- codeSmell
+- hotspot
+- coverage
+- duplication
+- lines
+- language
+- reliability
+- security
+- maintainability
+- hotspotRating
+- out_of_scope
+- yes
+- no
+forms:
+  projectName_form:
+    project_name:
+    - type: from_text
+slots:
+  project_name:
+    type: text
+responses:
+  utter_greet:
+  - text: Hello how can I help you?
+  utter_cheer_up:
+  - image: https://i.imgur.com/nGF1K8f.jpg
+    text: 'Here is something to cheer you up:'
+  utter_did_that_help:
+  - text: Did that help you?
+  utter_happy:
+  - text: Great, carry on!
+  utter_goodbye:
+  - text: Bye
+  utter_iamabot:
+  - text: I am a bot, powered by Rasa.
+  utter_start:
+  - buttons:
+    - payload: /navigate
+      title: Naviagate Pages
+    - payload: /projectMetrics
+      title: Find out details for a particular project
+    text: Hi! what would you like to do? (Type any of the following options below)
+  utter_navigate:
+  - text: navigate
+  utter_metrics:
+  - buttons:
+    - payload: /status
+      title: 'a: Quality Gate Status'
+    - payload: /bugs
+      title: 'b: No. of bugs'
+    - payload: /vulnerabilities
+      title: 'c: No. of vulnerabilities'
+    - payload: /codeSmell
+      title: 'd: No. of code smells'
+    - payload: /hotspot
+      title: 'e: Hotspots Reviewed Percentage'
+    - payload: /coverage
+      title: 'f: Coverage Percentage'
+    - payload: /duplication
+      title: 'g: Duplications Percentage'
+    - payload: /lines
+      title: 'h: No. of lines'
+    - payload: /language
+      title: 'i: Languages Used'
+    - payload: /reliability
+      title: 'j: Reliability Rating'
+    - payload: /security
+      title: 'k: Security Rating'
+    - payload: /maintainability
+      title: 'l: Maintainability Rating'
+    - payload: /hotspotRating
+      title: 'm: Hotspots Reviewed Rating'
+    text: What information would you like to know? (Type 'a', 'b', etc)
+  utter_whatProj:
+  - text: What project would you like to search for?
+  utter_moreProjectInfo:
+  - buttons:
+    - payload: /yes
+      title: "Yes"
+    - payload: /no
+      title: "No"
+    text: Would you like to know more details about {project_name}?
+  utter_moreProjectMetrics:
+  - buttons:
+    - payload: /status
+      title: 'a: Quality Gate Status'
+    - payload: /bugs
+      title: 'b: No. of bugs'
+    - payload: /vulnerabilities
+      title: 'c: No. of vulnerabilities'
+    - payload: /codeSmell
+      title: 'd: No. of code smells'
+    - payload: /hotspot
+      title: 'e: Hotspots Reviewed Percentage'
+    - payload: /coverage
+      title: 'f: Coverage Percentage'
+    - payload: /duplication
+      title: 'g: Duplications Percentage'
+    - payload: /lines
+      title: 'h: No. of lines'
+    - payload: /language
+      title: 'i: Languages Used'
+    - payload: /reliability
+      title: 'j: Reliability Rating'
+    - payload: /security
+      title: 'k: Security Rating'
+    - payload: /maintainability
+      title: 'l: Maintainability Rating'
+    - payload: /hotspotRating
+      title: 'm: Hotspots Reviewed Rating'
+    text: What information would you like to know about {project_name}? (Type 'a', 'b', etc)
+  utter_out_of_scope:
+  - text: Sorry, I didn't get what you said. Please rephrase what you said.
+  utter_what_else:
+  - buttons:
+    - payload: /navigate
+      title: Naviagate Pages
+    - payload: /projectMetrics
+      title: Find out details for a particular project
+    text: Hi! what else would you like to do? (Type any of the following options below)
+actions:
+- getProjectStatus
+- getProjectBugs
+- getProjectVulnerabilities
+- getProjectCode_smells
+- getProjectHotspotPercentage
+- getProjectCoverage
+- getProjectDuplicatePercentage
+- getProjectLines
+- getProjectCodeLanguages
+- getProjectHotspotNumber
+- getProjectMaintainabilityRating
+- getProjectSecurityRating
+- getProjectReliabilityRating
+- validate_projectName_form
+- moreProjectInfo
+- action_reset_all_slots

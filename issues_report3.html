@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Issues Report</title>
+    <style>
+        .issue_box { -pdf-keep-with-next: true; }
+        h1 { text-decoration: underline; -pdf-keep-with-next: true; }
+        issue_box, .issue_td {
+          /* border: 1px solid black;
+          border-collapse: collapse; */
+          background-color: #f2dede;
+        }
+        @font-face {
+          font-family: Bahnschrift;
+          src: url("{{ font }}")
+        }
+        .issue_td {
+          padding: 6px;
+          text-align: left;
+        }
+        th {
+            width: 20%;
+            padding: 5px;
+            text-align: left;
+        }
+        .category {
+            width : 15px;
+        }
+        .project_issues {
+          font-size: 28px;
+          font-weight: bold;
+          /* border: 1px solid black;
+          border-collapse: collapse; */
+
+        }
+        .project_issueTD {
+          vertical-align: bottom;
+        }
+        body {
+          font-family: "Bahnschrift";
+        }
+        </style>
+        </head>
+        <body>
+
+          <table class="project_issues">
+            <td class="project_issueTD" style="width:47px; vertical-align: top"><img style="width: 35px" src="{{ logo }}"></td>
+            <td class="project_issueTD" style="width:190px; padding-top: 3px;">Project Issues</td>
+            <td style="padding-bottom: 5px;"><hr></td>
+          </table>
+          <br>
+
+        {% for i in data %}
+        
+        <h1>File Name: {{i}}</h1>
+
+        {% for j in data[i] %}
+        
+        <table class="issue_box" style="width:100%; font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #525f7f;">
+          <tr>
+            <td class="issue_td" colspan="3">{{j["message"]}}</td>
+            <td class="issue_td" style="text-align: right;"><img class = "category" src="{{cal}}">&nbsp;&nbsp;&nbsp;<span>{{j['creationDate']}}</span></td>
+            <td class="issue_td" style="text-align: center;"><img class = "category" src="{{line}}">&nbsp;&nbsp;&nbsp;{{j['startLine']}}</td>
+        </tr>
+          <tr>
+            {% if j["type"] == "CODE_SMELL" %}
+            <td class="issue_td"><img class = "category" src="{{codesmell}}">&nbsp;&nbsp;&nbsp;{{j['type']}}</td>
+            {% elif j["type"] == "BUG" %}
+            <td class="issue_td"><img class = "category" src="{{bugs}}">&nbsp;&nbsp;&nbsp;{{j['type']}}</td>
+            {% else %}
+            <td class="issue_td"><img class = "category" src="{{vulnerability}}">&nbsp;&nbsp;&nbsp;{{j['type']}}</td>
+            {% endif %}
+
+            {% if j["severity"] == "BLOCKER" %}
+            <td class="issue_td"><img class = "category" src="{{blocker}}">&nbsp;&nbsp;&nbsp;{{j['severity']}}</td>
+            {% elif j["severity"] == "CRITICAL"%}
+            <td class="issue_td"><img class = "category" src="{{critical}}">&nbsp;&nbsp;&nbsp;{{j['severity']}}</td>
+            {% elif j["severity"] == "MAJOR"%}
+            <td class="issue_td"><img class = "category" src="{{major}}">&nbsp;&nbsp;&nbsp;{{j['severity']}}</td>
+            {% elif j["severity"] == "MINOR"%}
+            <td class="issue_td"><img class = "category" src="{{minor}}">&nbsp;&nbsp;&nbsp;{{j['severity']}}</td>
+            {% else %}   
+            <td class="issue_td"><img class = "category" src="{{info}}">&nbsp;&nbsp;&nbsp;{{j['severity']}}</td>
+            {% endif %}
+            <td class="issue_td"><img class = "category" src="{{open}}">&nbsp;&nbsp;&nbsp;{{j['status']}}</td>
+            <td class="issue_td" colspan="2"><img class = "category" src="{{effort}}">&nbsp;&nbsp;&nbsp;{{j['effort']}} effort</td>
+          </tr>
+        
+        </table>
+        <br></br>
+
+        <h2 style="font-size: 14px;">What is the issue?</h2>
+        <div style="font-size: 12px;">
+            {{ rules[j['rule']] }}
+        </div>
+
+        {% endfor %}
+
+        {% endfor %}
+
+
+        
+        
+        </body>
+</html>
+
+

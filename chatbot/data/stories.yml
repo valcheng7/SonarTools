@@ -1,0 +1,153 @@
+version: "2.0"
+
+stories:
+
+# - story: greeting 
+#   steps:
+#   - intent: greet 
+#   - action: utter_iamabot
+#   - action: utter_options
+
+- story: starting 
+  steps:
+  - intent: greet
+  - action: utter_start
+
+- story: navigate
+  steps:
+  - intent: navigate
+  - action: utter_navigate
+
+- story: ProjectMetrics
+  steps:
+  - intent: projectMetrics
+  - action: utter_whatProj
+  - action: action_reset_all_slots
+  - action: projectName_form
+  - active_loop: ProjectName_form
+  - slot_was_set:
+    - requested_slot: project_name
+  - slot_was_set:
+    - project_name: "CodeJam"
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: utter_metrics
+
+- story: statusProjectMetrics
+  steps:
+  - intent: status
+  - action: getProjectStatus
+  - action: utter_moreProjectInfo
+
+
+- story: bugsProjectMetrics
+  steps:
+  - intent: bugs
+  - action: getProjectBugs
+  - action: utter_moreProjectInfo
+
+- story: vulProjectMetrics
+  steps:
+  - intent: vulnerabilities
+  - action: getProjectVulnerabilities
+  - action: utter_moreProjectInfo
+
+- story: codesmellProjectMetrics
+  steps:
+  - intent: codeSmell
+  - action: getProjectCode_smells
+  - action: utter_moreProjectInfo
+
+- story: hotspotProjectMetrics
+  steps:
+  - intent: hotspot
+  - action: getProjectHotspotPercentage
+  - action: utter_moreProjectInfo
+
+- story: coverageProjectMetrics
+  steps:
+  - intent: coverage
+  - action: getProjectCoverage
+  - action: utter_moreProjectInfo
+
+- story: duplicationProjectMetrics
+  steps:
+  - intent: duplication
+  - action: getProjectDuplicatePercentage
+  - action: utter_moreProjectInfo
+
+- story: linesProjectMetrics
+  steps:
+  - intent: lines
+  - action: getProjectLines
+  - action: utter_moreProjectInfo
+
+- story: languageProjectMetrics
+  steps:
+  - intent: language
+  - action: getProjectCodeLanguages
+  - action: utter_moreProjectInfo
+
+- story: reliabilityProjectMetrics
+  steps:
+  - intent: reliability
+  - action: getProjectReliabilityRating
+  - action: utter_moreProjectInfo
+
+- story: securityProjectMetrics
+  steps:
+  - intent: security
+  - action: getProjectSecurityRating
+  - action: utter_moreProjectInfo
+
+- story: maintainabilityProjectMetrics
+  steps:
+  - intent: maintainability
+  - action: getProjectMaintainabilityRating
+  - action: utter_moreProjectInfo
+
+- story: hotspotRatingProjectMetrics
+  steps:
+  - intent: hotspotRating
+  - action: getProjectHotspotNumber
+  - action: utter_moreProjectInfo
+
+- story: happy_project_info
+  steps:
+  - intent: yes
+  - action: utter_moreProjectMetrics
+
+- story: sad_project_info
+  steps:
+  - intent: no
+  - action: action_reset_all_slots
+  - action: utter_what_else
+
+- story: out_of_scope
+  steps:
+  - intent: out_of_scope
+  - action: utter_out_of_scope
+  - action: action_listen
+
+  
+# - story: view more information 
+#   steps:
+#   - action: utter_viewMore
+#   - intent: yes
+#   - action: utter_options 
+
+# - story: Don't view any more information 
+#   steps:
+#   - action: utter_viewMore
+#   - intent: no
+#   - action: utter_any_help
+  
+
+# - story: happy bugs path 
+#   steps: 
+#   - intent: bugs
+#   - action: utter_project
+#   - action: getProjectBugs
+#   - action: utter_viewMore
+

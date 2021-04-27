@@ -1,0 +1,305 @@
+{% extends "includes/layout(issues).html" %}
+{% block title %}
+Sonar Tools - Code Issues
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="../static/css/code_issues.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.console-box {
+  padding: 0; 
+  margin: 0;
+}
+
+.card {
+    margin-bottom: 10px ! important;
+
+}
+.one-edge-shadow {
+	-webkit-box-shadow: 0 8px 6px -6px black;
+	   -moz-box-shadow: 0 8px 6px -6px black;
+	        box-shadow: 0 8px 6px -6px black;
+}
+</style>
+
+
+{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<!-- Header -->
+<div class="header pb-6">
+    <div class="container-fluid">
+      <div class="header-body">
+        <div class="row align-items-center py-4">
+          <div class="col-lg-6 col-7">
+            <!-- <h6 class="h2 text-black d-inline-block mb-0">Code Issues</h6> -->
+            <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+              <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                <li class="breadcrumb-item"><a href="/"><i class="fas fa-home"></i></a></li>
+                <li class="breadcrumb-item"><a href="/projects">Projects</a></li>
+                <li class="breadcrumb-item"><a href="/issues?source={{project}}">Issues</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Code Issues</li>
+                
+              </ol>
+            </nav>
+          </div>
+          <div class="col-lg-6 col-5 text-right">
+            <!-- <a href="#" class="btn btn-sm btn-neutral">New</a>
+
+         
+       
+            <a href="#" class="btn btn-sm btn-neutral">Filters</a> -->
+          </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="main-content" id="panel">
+<div class="container-fluid ">
+     
+
+<!-- Code Display -->
+
+
+<ol class="console-box">
+  <!-- <li>
+    <span class="monokai-lightgrey">&lt;!-- jQuery Prototype test --&gt;</span>
+  </li> -->
+  <div class='one-edge-shadow' style="padding: 8px; position: -webkit-sticky; position: sticky; top: 0; z-index: 1000; background-color: #404041;">
+    <h5 style="color: #8898aa; font-family: Monospace, sans-serif; padding: 5px;">{{file}}</h5>
+  </div>
+  
+  {% for index, content in enumerate(data) %}
+  <li id='{{content[1]["key"]}}'>
+    {% if content[0] == "" %}
+    <span class="monokai-white code" style="white-space: pre"><br></span>
+    {% elif content[0] != {} %}
+    <span class="monokai-white code" style="white-space: pre">{{content[0]}}</span>
+    {% endif %}
+    {% if content[1] != {} %}
+  
+      <div style="width: 100%; padding-top: 10px;">
+        <div class="card card-stats" style='background-color: #f2dede;'>
+            <!-- Card body -->
+            <div class="card-body" style='padding: 1rem 1.5rem !important;'>
+                
+        <div class="row" >
+            <div class="col" >
+                <h5 class="card-title text-muted mb-0" style="color: #525f7f !important; font-size: .8125rem !important; font-weight: 600 !important;">{{content[1]["message"]}}</h5>
+                <!-- <span class="h2 font-weight-bold mb-0">2,356</span> -->
+            </div>
+            {% if content[1]["startLine"] != None %}
+            <div class="col-auto">
+              <div style='font-size: small;'>
+                <i class="far fa-calendar-alt"></i>
+                 {{content[1]["creationDate"]}}
+                  &nbsp;
+                  <i class="fas fa-stream"></i>
+                  
+                    L{{content[1]["startLine"]}}
+              </div>
+            </div>
+            {% else %}
+            <div class="col-auto">
+              <div style='font-size: small;'>
+                <i class="far fa-calendar-alt"></i>
+                 {{content[1]["creationDate"]}}
+              </div>
+            </div>
+            {% endif %}
+        </div>
+        <p class="mt-3 mb-0 text-sm" style='color: black; font-size: smaller !important; margin-top: 1rem !important; '>
+            <!-- Code Smell Type------------------------------------------------------ -->
+            {% if content[1]["type"] == "CODE_SMELL" %}
+            <span class=" mr-2">
+                <span style="color: black;">
+                    <i class="fas fa-radiation-alt"></i>
+                </span>
+                 Code Smell
+            </span>
+
+          <!-- Bug Type------------------------------------------------------ -->
+
+            {% elif content[1]["type"] == "BUG" %}
+          <span class=" mr-2">
+              <span style="color: black;">
+                  <i class="fas fa-bug"></i>
+              </span>
+              Bug
+          </span>
+
+          <!-- Vulnerability Type------------------------------------------------------ -->
+          {% else %}
+          <span class=" mr-2">
+              <span style="color: black;">
+                  <i class="fas fa-unlock"></i>
+              </span>
+              Vulnerability
+          </span>
+          {% endif %}
+
+            <!-- Blocker serverity------------------------------------------------------ -->
+            {% if content[1]["severity"] == "BLOCKER" %}
+            <span class=" mr-2">
+                <span style="color: #FF3333;">
+                    <i class="fas fa-exclamation-circle"></i>
+                </span>
+                Blocker
+            </span>
+            
+            <!-- Critical serverity------------------------------------------------------ -->
+            {% elif content[1]["severity"] == "CRITICAL"%}
+            <span class=" mr-2">
+                <span style="color: #FF3333;">
+                    <i class="fas fa-arrow-circle-up"></i>
+                </span>
+                Critical
+            </span>
+            
+            <!-- Major serverity------------------------------------------------------ -->
+            {% elif content[1]["severity"] == "MAJOR"%}
+            <span class=" mr-2">
+                <span style="color: #FF3333;">
+                    <i class="fas fa-chevron-circle-up"></i>
+                </span>
+                Major
+            </span>
+            
+            <!-- Minor serverity------------------------------------------------------ -->
+            {% elif content[1]["severity"] == "MINOR"%}
+            <span class=" mr-2">
+                <span style="color: #48d1cc;">
+                    <i class="fas fa-arrow-circle-down"></i>
+                </span>
+                Minor
+            </span>
+            
+            <!-- Info serverity------------------------------------------------------ -->
+            {% else %}        
+            <span class=" mr-2">
+                <span style="color: #5e72e4;">
+                    <i class="fas fa-info-circle"></i>
+                </span>
+                  Info
+            </span>
+            {% endif %}
+
+            <span class=" mr-2">
+              <span style="color: #5e72e4;">
+                  <i class="fas fa-circle-notch"></i>
+              </span>
+              {{content[1]["status"]}}
+          </span>
+
+
+            <span class=" mr-2">
+                <span style="color: #48d1cc;">
+                    <i class="fas fa-running"></i>
+                </span>
+                {{content[1]["effort"]}} effort
+            </span>
+  
+            <!-- <span class=" mr-2">
+                <span style="color: black;">
+                    <i class="far fa-check-circle"></i>
+                </span>
+                Resolved
+            </span> -->
+  
+            <!-- <span class="text-nowrap">Major</span> -->
+        </p>
+            </div>           
+        </div>  
+        </div>
+    {%endif%}
+  </li>
+  {% endfor %}
+  {% if line %}
+    <script>
+        document.getElementById('{{ line }}').scrollIntoView(true);
+        // or
+        // document.location.hash = '#' + '{{ scroll }}';   
+    </script>
+    
+    {% endif %}
+  <!-- <li>
+    <span class="monokai-white">&lt;<span class="monokai-red">p</span>&gt;Common item&lt;/<span class="monokai-red">p</span>&gt;</span>
+  </li>
+  <li>
+    <span class="monokai-white">&lt;<span class="monokai-red">p</span> <span class="monokai-green">class</span>=<span class="monokai-yellow">"santa"</span>&gt;Santa Claus&lt;/<span class="monokai-red">p</span>&gt;</span>
+  </li>
+  <li>
+    <span>&nbsp;</span>
+  </li>
+  <li>
+    <span class="monokai-white">&lt;<span class="monokai-red">script</span>&gt;</span>
+  </li>
+  <li>
+    <ul>
+      <li>
+        <span class="monokai-white"><span class="monokai-teal">jQuery.fn</span>.<span class="monokai-green">exists</span> <span class="monokai-red">=</span> <span class="monokai-teal">function</span>(){</span>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <ul>
+      <li>
+        <ul>
+          <li>
+            <span class="monokai-white"><span class="monokai-red">return</span> this.<span class="monokai-teal">length</span> <span class="monokai-red">></span> <span class="monokai-violet">0</span>;</span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <ul>
+      <li>
+        <span class="monokai-white">}</span>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <ul>
+      <li>
+        <span class="monokai-white"><span class="monokai-red">if</span> (<span class="monokai-red">$</span>(<span class="monokai-yellow">".santa"</span>).exists()){</span>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <ul>
+      <li>
+        <ul>
+          <li>
+            <span class="monokai-white">console.<span class="monokai-teal">log</span>(<span class="monokai-yellow">"Santa exists!"</span>);</span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <ul>
+      <li>
+        <span class="monokai-white">}</span>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <span class="monokai-white">&lt;/<span class="monokai-red">script</span>&gt;</span>
+  </li> -->
+</ol>
+
+<br> <br> <br>
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

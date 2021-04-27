@@ -1,0 +1,190 @@
+{% extends "includes/layout(login).html" %}
+{% block title %}
+Sonar Tools - Login
+{% endblock %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block content %}
+
+
+
+<!-- Main content -->
+<div class="main-content">
+
+    <!-- Header -->
+    <div class="header bg-gradient-primary py-7 py-lg-8 pt-lg-9">
+      <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+              {% for category, message in messages %}
+
+                  <!-- <div class="alert alert-{{ category }}">
+                      {{ message }}
+                  </div> -->
+
+                  <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {% if category == 'danger' %}
+                    <span class="alert-icon"><i class="fas fa-exclamation-circle"></i></span>
+                    {% else %}
+                    <span class="alert-icon"><i class="far fa-check-circle"></i></span>
+                    {% endif %}
+                    <span class="alert-text">{{ message }}</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+              {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <div class="header-body text-center mb-7">
+          <div class="row justify-content-center">
+            <div class="col-xl-5 col-lg-6 col-md-8 px-5">
+              <h1 class="text-white">Welcome to Sonar Tools</h1>
+              <p class="text-lead text-white">Login using your SonarQube Account Credentials</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="separator separator-bottom separator-skew zindex-100">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+      </div>
+    </div>
+    <!-- Page content -->
+    <div class="container mt--8 pb-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+          <div class="card bg-secondary border-0 mb-0">
+            <!-- <div class="card-header bg-transparent pb-5">
+              <div class="text-muted text-center mt-2 mb-3"><small>Sign in with</small></div>
+              <div class="btn-wrapper text-center">
+                <a href="#" class="btn btn-neutral btn-icon">
+                  <span class="btn-inner--icon"><img src="../static/img/icons/common/github.svg"></span>
+                  <span class="btn-inner--text">Github</span>
+                </a>
+                <a href="#" class="btn btn-neutral btn-icon">
+                  <span class="btn-inner--icon"><img src="../static/img/icons/common/google.svg"></span>
+                  <span class="btn-inner--text">Google</span>
+                </a>
+              </div>
+            </div> -->
+            <div class="card-body px-lg-5 py-lg-5">
+              <div class="text-center text-muted mb-4">
+                <!-- <small>Or sign in with credentials</small> -->
+                <img width='200rem' src="../static/img/brand/sonar.svg">
+              </div>
+              <form role="form" method="POST" action="">
+                {{ form.hidden_tag() }}
+                
+                {% if form.login.errors %}
+
+                <div class="form-group mb-3">
+                  <div class="input-group input-group-merge input-group-alternative">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" style="border-color:#fb6340"><i class="far fa-envelope"></i></span>
+                    </div>
+                      {{ form.login(class="form-control is-invalid") }}
+                  </div>
+                  <div  class="invalid-feedback">
+                    {% for error in form.login.errors %}
+                      <span>{{ error }}</span>
+                    {% endfor %}
+                  </div>
+                </div>
+
+                {% else %}
+                <div class="form-group mb-3">
+                  <div class="input-group input-group-merge input-group-alternative">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                    </div>    
+                      {{ form.login(class="form-control", placeholder="Login") }}
+                  </div>
+                  
+                </div>
+                {% endif %}
+                    
+                    {% if form.password.errors %}
+                    <div class="form-group">
+                      <div class="input-group input-group-merge input-group-alternative">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" style="border-color:#fb6340"><i class="fas fa-unlock-alt"></i></span>
+                        </div>
+                      {{ form.password(class="form-control is-invalid") }}
+                      </div>
+                      <div class="invalid-feedback">
+                        {% for error in form.password.errors %}
+                          <span>{{ error }}</span>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    {% else %}
+                    <div class="form-group">
+                      <div class="input-group input-group-merge input-group-alternative">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-unlock-alt"></i></span>
+                        </div>
+                      {{ form.password(class="form-control", placeholder="Password") }}
+                    <!-- <input class="form-control" placeholder="Password" type="password"> -->
+                  </div>
+                </div>
+                {% endif %}
+                <!-- <div class="custom-control custom-control-alternative custom-checkbox">
+                  <input class="custom-control-input" id=" customCheckLogin" type="checkbox">
+                  <label class="custom-control-label" for=" customCheckLogin">
+                    <span class="text-muted">Remember me</span>
+                  </label>
+                </div> -->
+                <div class="text-center">
+                  {{ form.submit(class="btn btn-primary my-4") }}
+                  <!-- <button type="button" class="btn btn-primary my-4">Login</button> -->
+                </div>
+              </form>
+            </div>
+          </div>
+          <!-- <div class="row mt-3">
+            <div class="col-6">
+              <a href="#" class="text-light"><small>Forgot password?</small></a>
+            </div>
+            <div class="col-6 text-right">
+              <a href="#" class="text-light"><small>Create new account</small></a>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+  console.log('here')
+  document.querySelector('#login').addEventListener('focus', e => {
+    if(document.querySelector('.invalid-feedback') == null){
+    event.target.parentElement.children[0].children[0].style.borderColor = '#5e72e4';
+    }
+  })
+  document.querySelector('#login').addEventListener('blur', e => {
+    if(document.querySelector('.invalid-feedback') == null){
+    event.target.parentElement.children[0].children[0].style.borderColor = '';
+    }
+  })
+
+  document.querySelector('#password').addEventListener('focus', e => {
+    if(document.querySelector('.invalid-feedback') == null){
+    event.target.parentElement.children[0].children[0].style.borderColor = '#5e72e4';
+    }
+  })
+  document.querySelector('#password').addEventListener('blur', e => {
+    if(document.querySelector('.invalid-feedback') == null){
+    event.target.parentElement.children[0].children[0].style.borderColor = '';
+    }
+  })
+</script>
+{% endblock %}
