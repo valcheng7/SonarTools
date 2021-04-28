@@ -517,7 +517,7 @@ def login():
                 email = data['email']
                 groups = data['groups']
                 curr_user = {'name': name, 'login': login, 'email': email, 'groups': groups}
-                flash('You have successfully logged into Cyros!', 'success')
+                flash('You have successfully logged into Sonar Tools!', 'success')
                 return redirect(url_for('load5'))
             else:
                 flash('Incorrect login or password, please check your credentials again.', 'danger')
